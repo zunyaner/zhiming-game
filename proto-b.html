@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0c0f">
+<title>致命游戏 · 原型B · 盘问</title>
+<style>
+:root{
+  --bg:#080a0d; --bg2:#0f1216; --panel:#13161b; --panel2:#181c22; --edge:#2a3038; --edge2:#3a424c;
+  --text:#d9dde2; --soft:#a9b0b8; --faint:#6e7782; --rule:#252b33;
+  --snow:#eef3f6; --ice:#8fb3c9; --ice-soft:rgba(143,179,201,.1);
+  --rust:#b0352e; --rust-soft:rgba(176,53,46,.14); --blood:#7d1e1a;
+  --amber:#c9a26b; --amber-soft:rgba(201,162,107,.12);
+  --rose:#d4728a; --rose-soft:rgba(212,114,138,.12);
+  --green:#6fa58a; --oth:#8d96a3;
+  --serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --mono:"SFMono-Regular","Menlo","Consolas","Courier New",monospace;
+  --hand:"Kaiti SC","STKaiti","KaiTi","楷体","AR PL UKai CN","Noto Serif CJK SC",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.9;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(ellipse at 50% -10%, rgba(143,179,201,.13), transparent 55%),radial-gradient(ellipse at 50% 120%, rgba(176,53,46,.10), transparent 50%),repeating-linear-gradient(0deg, rgba(255,255,255,.012) 0 1px, transparent 1px 3px);background-attachment:fixed}
+button{font-family:inherit;cursor:pointer;color:inherit;background:none;border:none}
+#app{max-width:740px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative;padding:10px 10px 0}
+#snowLayer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+#app>*{position:relative;z-index:1}
+.flake{position:absolute;top:-10px;width:3px;height:3px;border-radius:50%;background:#eef3f6;animation:snow linear infinite}
+@keyframes snow{to{transform:translate3d(var(--dx,20px),110vh,0)}}
+
+/* ---------- system HUD header ---------- */
+header{position:sticky;top:0;z-index:20;background:rgba(13,15,19,.94);backdrop-filter:blur(6px);border:1px solid var(--edge);border-bottom:none;padding:9px 16px 8px}
+header::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--rust) 20%,var(--rust) 80%,transparent);opacity:.8}
+.hrow{display:flex;align-items:center;gap:10px;margin-top:2px}
+.brand{font-family:var(--mono);font-weight:700;letter-spacing:.14em;color:var(--snow);font-size:12px;white-space:nowrap;border:1px solid var(--edge2);padding:2px 8px;background:linear-gradient(180deg,#1d2228,#12151a);position:relative}
+.brand::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--rust);margin-right:6px;vertical-align:1px;box-shadow:0 0 6px var(--rust);animation:blink 2.4s infinite}
+@keyframes blink{50%{opacity:.25}}
+.scene-title{flex:1;font-family:var(--serif);font-size:13px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{display:flex;gap:5px}
+.tbtn{position:relative;border:1px solid var(--edge2);border-radius:2px;padding:4px 9px;font-size:12px;color:var(--soft);font-family:var(--serif);letter-spacing:.06em;transition:.2s;background:rgba(255,255,255,.02)}
+.tbtn:hover{border-color:var(--ice);color:var(--snow);background:var(--ice-soft)}
+.tbtn .badge{position:absolute;top:-6px;right:-6px;background:var(--rust);color:#fff;font-size:9px;font-weight:700;font-family:var(--sans);border-radius:8px;min-width:15px;height:15px;line-height:15px;text-align:center;padding:0 4px;display:none}
+.tbtn.pulse{animation:pulse 1.2s ease 3}
+@keyframes pulse{50%{box-shadow:0 0 0 3px rgba(176,53,46,.35);border-color:var(--rust)}}
+.beats{display:flex;gap:4px;margin-top:9px;align-items:center}
+.beat{flex:1;height:6px;border:1px solid var(--edge2);background:transparent;transition:.4s;position:relative}
+.beat.done{background:linear-gradient(180deg,#4a2420,#2c1514);border-color:#5a2a25}
+.beat.cur{background:var(--rust);border-color:var(--rust);box-shadow:0 0 8px rgba(176,53,46,.6)}
+.beat-label{font-size:11px;color:var(--faint);margin-top:4px;display:flex;justify-content:space-between;font-family:var(--mono);letter-spacing:.06em}
+.beat-label b{color:var(--snow);font-weight:600;font-family:var(--serif)}
+
+/* ---------- reading area ---------- */
+#story{flex:1;background:linear-gradient(180deg, rgba(19,22,27,.96), rgba(14,17,21,.98));border-left:1px solid var(--edge);border-right:1px solid var(--edge);padding:26px 32px 36px;min-height:50vh;box-shadow:inset 0 0 80px rgba(0,0,0,.5)}
+#story.pov-ruan{background:linear-gradient(180deg, rgba(26,17,21,.96), rgba(17,12,15,.98))}
+.chap-card{border:1px solid var(--edge2);background:linear-gradient(180deg,#1b1f25,#14171c);padding:16px 20px 14px 26px;margin:0 0 28px;position:relative;animation:fade .55s;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 6px 18px rgba(0,0,0,.35)}
+.chap-card::before,.chap-card::after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#7b838d,#2b3036);left:9px}
+.chap-card::before{top:10px}.chap-card::after{bottom:10px}
+.chap-stamp{position:absolute;right:12px;top:10px;font-size:9px;letter-spacing:.22em;color:var(--rust);border:1px solid var(--rust);padding:1px 6px;font-family:var(--mono);font-weight:700;opacity:.85}
+.chap-card small{display:block;color:var(--ice);letter-spacing:.28em;font-size:11px;font-family:var(--mono);margin-bottom:3px}
+.chap-card h2{font-family:var(--serif);font-size:22px;letter-spacing:.14em;font-weight:700;color:var(--snow)}
+.chap-card.ruan{border-color:#4a2f38}.chap-card.ruan small{color:var(--rose)}.chap-card.ruan .chap-stamp{color:var(--rose);border-color:var(--rose)}
+.chap-time{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.12em;border-top:1px dashed var(--edge2);padding-top:3px}
+.chap-time b{color:var(--rust);font-weight:700}
+.line{margin:0 0 18px;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.line.narr p{color:var(--text);font-family:var(--serif);font-size:16.5px;text-indent:2em;line-height:2.05;letter-spacing:.02em}
+.line.talk{display:grid;grid-template-columns:auto 1fr;gap:10px 14px;align-items:start;margin:0 0 20px;padding:2px 0}
+.who{flex:none;font-family:var(--serif);font-size:12.5px;font-weight:700;padding:2px 10px 3px;letter-spacing:.12em;border:1px solid;border-radius:2px;white-space:nowrap;margin-top:3px;background:rgba(255,255,255,.03)}
+.talk p{font-family:var(--serif);font-size:16px;color:var(--text);line-height:1.95;border-bottom:1px dashed var(--rule);padding-bottom:10px}
+.who.c-lin{color:#e7c995;border-color:#8a6d43;background:rgba(201,162,107,.10)}
+.who.c-ruan{color:#f0a9ba;border-color:#9a4a5e;background:rgba(212,114,138,.12)}
+.who.c-vet{color:#b8cad6;border-color:#4f6575;background:rgba(143,179,201,.08)}
+.who.c-npc{color:#d3a29d;border-color:#6a3430;background:rgba(176,53,46,.10)}
+.who.c-oth{color:#b2b9c2;border-color:#454d57}
+.line.sys{text-align:center;margin:12px 0 20px}
+.line.sys span{display:inline-block;font-size:12px;font-family:var(--mono);color:var(--ice);letter-spacing:.08em;border:1px solid rgba(143,179,201,.4);padding:4px 14px;background:var(--ice-soft)}
+.line.sense{margin:0 0 24px;padding:10px 14px 10px 18px;border-left:2px solid var(--ice);background:linear-gradient(90deg, rgba(143,179,201,.07), transparent 85%);position:relative}
+.line.sense::before{content:attr(data-who);position:absolute;left:-2px;top:-11px;font-size:10.5px;letter-spacing:.2em;color:var(--ice);background:var(--panel);padding:0 4px;font-family:var(--serif)}
+.line.sense p{font-family:var(--serif);font-style:italic;color:var(--soft);font-size:15px;line-height:1.95;opacity:0;animation:fade .6s ease forwards}
+.line.sense.ruan{border-left-color:var(--rose);background:linear-gradient(90deg, rgba(212,114,138,.08), transparent 85%)}
+.line.sense.ruan::before{color:var(--rose);background:#1a1115}
+.line.act p{font-family:var(--serif);font-size:15px;color:var(--soft);font-style:italic;border-left:2px solid var(--amber);padding:2px 0 2px 12px}
+.line.act.ruan p{border-left-color:var(--rose)}
+.pov-div{display:flex;align-items:center;gap:10px;margin:6px 0 22px;font-family:var(--mono);font-size:11.5px;letter-spacing:.3em;color:var(--faint);animation:fade .5s}
+.pov-div::before,.pov-div::after{content:"";flex:1;height:1px;background:var(--edge2)}
+.pov-div b{color:var(--rose);font-family:var(--serif)}
+.pov-div.lin b{color:var(--amber)}
+.mnote{font-family:var(--hand);color:#c9817a;font-size:13.5px;line-height:1.5;display:inline-block}
+.chap-card .mnote{position:absolute;right:14px;bottom:9px;max-width:50%;text-align:right;font-size:13px;opacity:.9}
+.card .mnote{display:block;margin-top:6px;padding-top:4px;border-top:1px dashed rgba(201,129,122,.25)}
+.fs-mark{background:linear-gradient(transparent 60%, rgba(176,53,46,.35) 60%)}
+.fs-note{display:block;margin:4px 0 0 2em;font-family:var(--hand);font-size:13.5px;color:#d98f86;text-indent:0}
+.fs-note i{font-style:normal;font-family:var(--mono);font-size:10px;border:1px solid #d98f86;padding:0 4px;margin-right:6px;letter-spacing:.1em}
+.fs-note.missed i{background:#d98f86;color:#111}
+.talk .fs-note{margin-left:0}
+
+/* ---------- clock ---------- */
+.clock{display:flex;align-items:baseline;gap:6px;white-space:nowrap;border:1px solid var(--edge2);padding:1px 8px 2px;position:relative;font-family:var(--mono);background:#0c0e11}
+.clock small{font-size:10px;letter-spacing:.12em;color:var(--faint)}
+.clock b{font-size:14px;color:var(--rust);letter-spacing:.06em;text-shadow:0 0 6px rgba(176,53,46,.5)}
+.clock .dt{position:absolute;right:-4px;top:-12px;font-size:10px;color:var(--rust);font-weight:700;opacity:0;pointer-events:none}
+.clock .dt.go{animation:dt 1.6s ease}
+@keyframes dt{0%{opacity:0;transform:translateY(4px)}15%,70%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-6px)}}
+.clock.tick b{animation:tick .6s ease}
+@keyframes tick{50%{color:var(--snow)}}
+.clock.night b{color:#ff5a4e}
+
+/* ---------- survey (clickable SVG scene) ---------- */
+.survey{border:1px solid var(--edge2);border-top:2px solid var(--rust);background:#0d1014;margin:6px 0 22px;padding:14px 14px 10px;position:relative;animation:fade .5s}
+.survey h3{font-family:var(--serif);font-size:15px;letter-spacing:.18em;color:var(--snow)}
+.survey .sv-sub{font-size:12px;color:var(--faint);font-family:var(--serif);margin-bottom:8px}
+.survey .sv-stamp{position:absolute;right:12px;top:10px;font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--rust);border:1px solid var(--rust);padding:1px 6px;font-weight:700}
+.survey svg{display:block;width:100%;height:auto;cursor:crosshair;user-select:none;background:#0a0c0f;border:1px solid var(--edge)}
+.survey .hs{cursor:pointer;outline:none}
+.survey .hs .ring{fill:none;stroke:var(--rust);stroke-width:1.2;transform-box:fill-box;transform-origin:center;animation:ring 1.8s ease-out infinite}
+@keyframes ring{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(2)}}
+.survey .hs .dot{fill:rgba(20,10,10,.85);stroke:var(--rust);stroke-width:1.6;transition:.2s}
+.survey .hs:hover .dot,.survey .hs:focus .dot{fill:#3a1513}
+.survey .hs text.n{font-family:var(--mono);font-size:11px;font-weight:700;fill:#ff8a80;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.survey .hs text.lb{font-family:var(--serif);font-size:9.5px;fill:#cfd6dc;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:#0a0c0f;stroke-width:3px}
+.survey .hs.seen .ring{display:none}
+.survey .hs.seen .dot{fill:#2b3138;stroke:var(--ice)}
+.survey .hs.seen text.n{fill:var(--ice)}
+.survey.busy .hs{pointer-events:none;opacity:.55}
+.survey .legend{display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;margin-top:8px;font-family:var(--serif);font-size:12.5px;color:var(--soft)}
+.survey .legend span b{font-family:var(--mono);color:var(--rust);margin-right:4px}
+.survey .legend span.seen{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--ice)}
+.survey .legend span i{font-style:normal;font-size:10.5px;color:var(--amber);margin-left:4px}
+.sv-note{margin-top:8px;min-height:26px;font-family:var(--serif);font-size:13px;color:var(--soft);display:flex;gap:8px;align-items:flex-start}
+.sv-note .who{font-size:11px;padding:1px 7px 2px}
+.btn-ghost{display:block;width:100%;padding:8px;margin-bottom:6px;border:1px dashed var(--edge2);border-radius:2px;color:var(--soft);font-family:var(--serif);font-size:13px;letter-spacing:.15em}
+.btn-ghost:hover{border-color:var(--ice);color:var(--snow)}
+.btn-next[disabled]{opacity:.4;cursor:default}
+.rx{display:none;margin-top:6px;font-family:var(--serif);font-size:13.5px;align-items:flex-start;gap:8px}
+.quiz.done .rx.on{display:flex}
+.rx .who{font-size:11px;padding:1px 7px 2px}
+
+/* ---------- controls ---------- */
+#controls{position:sticky;bottom:0;z-index:15;padding:12px 18px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg, #0f1216 78%, rgba(15,18,22,0));border-left:1px solid var(--edge);border-right:1px solid var(--edge);border-bottom:1px solid var(--edge)}
+#controls:empty{padding:0;border:none;background:none}
+.btn-next{display:block;width:100%;padding:11px;border:1px solid var(--rust);border-radius:2px;background:linear-gradient(180deg,rgba(176,53,46,.16),rgba(176,53,46,.06));color:#f1c9c4;font-family:var(--serif);font-size:14.5px;letter-spacing:.25em;transition:.2s}
+.btn-next:hover{background:rgba(176,53,46,.28)}
+.btn-next .k{font-size:11px;color:var(--faint);letter-spacing:0;margin-left:10px;font-family:var(--mono)}
+.choice-prompt{font-size:12px;color:var(--faint);margin-bottom:10px;letter-spacing:.1em;font-family:var(--mono);border-bottom:1px solid var(--edge);padding-bottom:6px}
+#controls .choice-prompt{position:relative;background:#0f1216;box-shadow:0 -10px 12px 4px #0f1216}
+.choice{display:block;width:100%;text-align:left;margin-bottom:6px;padding:10px 14px 10px 44px;border:1px solid var(--edge);border-radius:2px;background:rgba(255,255,255,.02);font-family:var(--serif);font-size:15px;line-height:1.7;color:var(--text);position:relative;transition:.15s}
+.choice::before{content:"[" attr(data-n) "]";position:absolute;left:10px;top:10px;font-family:var(--mono);font-size:13px;color:var(--rust)}
+.choice:hover{background:rgba(176,53,46,.10);border-color:#5a2a25}
+.choice.locked{color:var(--faint);cursor:not-allowed}
+.choice.locked::before{content:"[×]"}
+.choice.locked small{display:block;font-size:12px;color:var(--rose);font-style:italic}
+.choice.locked:hover{background:transparent;border-color:var(--edge)}
+
+/* ---------- quiz = rule terminal ---------- */
+.quiz{border:1px solid var(--edge2);border-top:2px solid var(--ice);padding:18px 16px;margin:8px 0 20px;background:#0c0f12;animation:fade .5s}
+.quiz h3{font-family:var(--serif);color:var(--snow);font-size:16px;margin-bottom:4px;letter-spacing:.15em}
+.quiz .qsub{font-size:12px;color:var(--faint);margin-bottom:14px;font-family:var(--serif)}
+.q{margin-bottom:18px}
+.q .qt{font-weight:600;margin-bottom:8px;font-size:15px;font-family:var(--serif);color:var(--snow)}
+.opt{display:block;width:100%;text-align:left;padding:8px 12px;margin-bottom:4px;border:1px solid var(--edge);border-radius:2px;font-family:var(--serif);font-size:14.5px;color:var(--text);transition:.15s;background:rgba(255,255,255,.015)}
+.opt:hover:not([disabled]){background:var(--ice-soft);border-color:#3e5260}
+.opt.sel{border-color:var(--ice);background:var(--ice-soft)}
+.opt.right{border-color:var(--green);background:rgba(111,165,138,.12)}
+.opt.wrong{border-color:var(--rust);background:var(--rust-soft)}
+.opt[disabled]{cursor:default}
+.explain{font-size:13px;color:var(--soft);font-family:var(--serif);border-left:2px solid var(--ice);padding-left:10px;margin-top:6px;display:none}
+.quiz.done .explain{display:block}
+.qscore{font-size:14px;color:var(--ice);text-align:center;margin-top:10px;font-weight:600;font-family:var(--mono);letter-spacing:.06em}
+
+/* ---------- drawers ---------- */
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:40;opacity:0;pointer-events:none;transition:.25s}
+.mask.show{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,94vw);background:#0e1115;border-left:1px solid var(--edge2);z-index:50;transform:translateX(105%);transition:transform .3s ease;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.dhead{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--edge)}
+.dhead h3{font-family:var(--serif);color:var(--snow);letter-spacing:.2em;font-size:16px}
+.dhead .x{border:1px solid var(--edge2);border-radius:2px;padding:2px 10px;font-size:12px;font-family:var(--serif);color:var(--soft)}
+.dbody{overflow-y:auto;padding:14px 16px 30px;flex:1}
+.dsec{font-size:11px;color:var(--faint);letter-spacing:.25em;margin:14px 0 8px;border-bottom:1px solid var(--edge);padding-bottom:4px;font-family:var(--mono)}
+.card{border:1px solid var(--edge2);background:linear-gradient(180deg,#171b20,#121519);border-radius:2px;padding:12px 14px;margin-bottom:12px;position:relative;transition:.3s}
+.card h4{font-size:14.5px;margin-bottom:4px;display:flex;align-items:center;gap:8px;font-family:var(--serif);color:var(--snow);flex-wrap:wrap}
+.card h4 .tag{font-size:10px;font-weight:400;color:var(--ice);border:1px solid #3e5260;border-radius:2px;padding:0 5px;font-family:var(--mono)}
+.card p{font-size:13px;color:var(--soft);line-height:1.75;font-family:var(--serif)}
+.card.locked{opacity:.45;border-style:dashed;background:transparent}
+.card.fresh{border-color:var(--rust);box-shadow:0 0 0 1px rgba(176,53,46,.3) inset}
+.card.fresh::after{content:"NEW";position:absolute;top:6px;right:8px;font-size:9.5px;color:var(--rust);font-family:var(--mono);letter-spacing:.15em;font-weight:700}
+.card .pin,.card .clip{display:none}
+.card.ded{border-color:#6b5a3a;background:linear-gradient(180deg,#1d1a14,#14120e)}
+.card.ded h4 .tag{color:var(--amber);border-color:#6b5a3a}
+.card.sel{outline:2px solid var(--rust);outline-offset:2px}
+.card.pickable{cursor:pointer}
+.photo{float:right;margin:-2px -4px 6px 10px;width:112px;background:#050607;padding:4px;border:1px solid var(--edge2)}
+.photo svg{display:block;width:104px;height:74px}
+.board-meta{font-size:12.5px;color:var(--faint);font-family:var(--serif)}
+.board-meta b{color:var(--rust)}
+.combo-bar{position:sticky;bottom:0;margin:10px -16px -30px;padding:10px 16px 14px;background:rgba(20,24,29,.98);border-top:1px solid var(--edge2);font-family:var(--serif);font-size:13px}
+.combo-bar .row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.combo-bar button{border:1px solid var(--rust);padding:5px 12px;font-family:var(--serif);font-size:13px;letter-spacing:.1em;color:#f1c9c4}
+.combo-bar button[disabled]{opacity:.4;cursor:default}
+.combo-bar .msgline{margin-top:6px;min-height:20px}
+.combo-toggle{display:block;width:100%;margin:8px 0 6px;padding:8px;border:1px dashed var(--ice);font-family:var(--serif);font-size:13.5px;letter-spacing:.18em;color:var(--ice)}
+.drawer#drawerMenu .t-btn{display:block;width:100%;margin:0 0 8px;padding:10px;border:1px solid var(--edge2);border-radius:2px;color:var(--text);font-family:var(--serif);font-size:14px;letter-spacing:.12em;text-align:center;transition:.2s;background:rgba(255,255,255,.02)}
+.drawer#drawerMenu .t-btn:hover{border-color:var(--ice);color:var(--snow)}
+
+/* ---------- toast ---------- */
+#toasts{position:fixed;top:76px;left:50%;transform:translateX(-50%);z-index:60;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none;width:92vw;max-width:420px}
+.toast{background:rgba(12,14,17,.96);border:1px solid var(--rust);color:#f1c9c4;padding:6px 16px;border-radius:2px;font-size:13px;font-family:var(--mono);letter-spacing:.06em;animation:toast 2.8s ease forwards;text-align:center;box-shadow:0 0 14px rgba(176,53,46,.25)}
+@keyframes toast{0%{opacity:0;transform:translateY(-6px)}10%,80%{opacity:1;transform:none}100%{opacity:0}}
+
+/* ---------- phone / note interludes ---------- */
+.phone{margin:6px auto 22px;max-width:360px;border:1px solid var(--edge2);background:#0b0d10;position:relative;animation:fade .5s;border-radius:14px;overflow:hidden}
+.phone .ph-h{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--faint);padding:8px 14px 6px;border-bottom:1px solid var(--edge);letter-spacing:.08em}
+.phone .ph-b{padding:10px 12px 12px;display:flex;flex-direction:column;gap:7px}
+.phone .msg{max-width:82%;font-family:var(--serif);font-size:14px;line-height:1.6;padding:5px 10px;border:1px solid var(--edge2);background:#151a1f;border-radius:8px;opacity:0;animation:fade .4s forwards}
+.phone .msg.me{align-self:flex-end;background:#2a2218;border-color:#5b4a30}
+.phone .msg.ruan{border-color:#6a3a48;background:#21141a}
+.phone .msg small{display:block;font-family:var(--mono);font-size:9.5px;color:var(--faint)}
+.phone .ph-f{font-family:var(--mono);font-size:10px;color:var(--faint);text-align:right;padding:0 12px 7px;letter-spacing:.15em}
+.bilu{margin:4px 0 22px;padding:16px 18px 14px 20px;background:#e9e3d4;color:#2a241c;border:1px solid #b9ae95;position:relative;animation:fade .5s;transform:rotate(-.5deg);box-shadow:0 6px 18px rgba(0,0,0,.5)}
+.bilu::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%, rgba(125,30,26,.18), transparent 40%);pointer-events:none}
+.bilu h4{font-family:var(--mono);font-size:11px;letter-spacing:.25em;color:#6e655a;margin-bottom:6px}
+.bilu .bl{font-family:var(--hand);font-size:18px;line-height:30px;color:#1b1712}
+.bilu del{color:#7a6f63;text-decoration:line-through;text-decoration-thickness:2px}
+.bilu ins{text-decoration:none;color:#7d1e1a}
+.bilu .sig{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:8px;font-family:var(--mono);font-size:11px;color:#6e655a}
+.bilu .sig b{font-family:var(--hand);font-size:20px;color:#7d1e1a;font-weight:400}
+.bilu .print{width:22px;height:22px;border-radius:50%;border:2px solid rgba(125,30,26,.6)}
+.bilu .mnote{display:block;margin-top:8px;text-align:right;color:#7d1e1a}
+
+/* ---------- read (阮白洁 POV) ---------- */
+.read{border:1px solid #4a2f38;border-top:2px solid var(--rose);background:rgba(33,20,26,.75);padding:16px 16px 12px;margin:6px 0 22px;animation:fade .5s;position:relative}
+.read h3{font-family:var(--serif);font-size:15px;letter-spacing:.18em;color:#f0a9ba}
+.read .rd-sub{font-size:12px;color:var(--faint);font-family:var(--serif);margin:2px 0 10px}
+.read .rd-text{font-family:var(--serif);font-size:16px;line-height:2.1;color:var(--text)}
+.rd-frag{border-bottom:1.5px dotted var(--rose);cursor:pointer;padding:0 1px;transition:.15s}
+.rd-frag:hover{background:var(--rose-soft)}
+.rd-frag.ok{background:rgba(111,165,138,.18);border-bottom:2px solid var(--green)}
+.rd-frag.bad{background:var(--rust-soft);border-bottom:2px solid var(--rust)}
+.read.done .rd-frag{cursor:default}
+.read .rd-ex{margin-top:8px;font-family:var(--serif);font-size:13.5px;color:#f0c3cd;border-left:2px solid var(--rose);padding-left:10px;display:none}
+.read.done .rd-ex{display:block}
+
+/* ---------- board = rule deduction console ---------- */
+.board{position:relative;margin:6px 0 22px;padding:14px 12px 12px;background:#0b0e11;border:1px solid var(--edge2);border-top:2px solid var(--ice);animation:fade .5s;background-image:linear-gradient(rgba(143,179,201,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(143,179,201,.04) 1px,transparent 1px);background-size:18px 18px}
+.board h3{font-family:var(--serif);font-size:15px;letter-spacing:.2em;color:var(--snow)}
+.board .wb-sub{font-size:12px;color:var(--faint);font-family:var(--serif);margin-bottom:8px}
+.board svg.strings{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.wb-sec{position:relative;z-index:2;margin:8px 0 6px;font-family:var(--mono);font-size:11px;letter-spacing:.25em;color:var(--faint)}
+.wb-row{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--edge2);background:#14181d;padding:4px 10px;font-family:var(--serif);font-size:14px;color:var(--snow);border-radius:2px;transition:.15s;line-height:1.4}
+.chip.ev{font-size:12.5px;color:var(--text);background:#111418}
+.chip.ev.ded{border-color:#6b5a3a;background:#1a1712;color:#e7d3ae}
+.chip.on{border-color:var(--rust);box-shadow:0 0 0 2px rgba(176,53,46,.3)}
+.chip.hint::after{content:"·阮";font-size:10px;color:var(--rose);margin-left:3px}
+.tps{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0}
+.tp{border:1px solid var(--edge2);background:#12161a;padding:7px 9px 8px;text-align:left;font-family:var(--serif);font-size:13px;position:relative;min-height:62px;color:var(--text)}
+.tp b{font-family:var(--mono);color:var(--rust);font-size:12px;margin-right:6px}
+.tp .tl{display:block;font-family:var(--hand);font-size:13.5px;color:var(--ice);margin-top:3px;line-height:1.5}
+.tp .tl em{font-style:normal;color:var(--faint);font-family:var(--serif);font-size:11.5px}
+.tp.on{border:1px solid var(--rust);background:#1d1314}
+.tp .mk{position:absolute;right:6px;top:4px;font-family:var(--mono);font-size:15px}
+.tp .mk.y{color:var(--green)} .tp .mk.n{color:var(--rust)}
+.wb-acc{position:relative;z-index:2;margin-top:10px;border-top:1px dashed var(--edge2);padding-top:8px}
+.wb-acc .opt{font-size:14px}
+.wb-tip{position:relative;z-index:2;font-family:var(--serif);font-size:12.5px;color:var(--soft);margin-top:6px;min-height:20px}
+.wb-tip .who{font-size:11px;padding:1px 7px 2px;margin-right:6px}
+
+/* ---------- confrontation ---------- */
+.interro{border:1px solid #4a2a26;border-top:3px solid var(--rust);background:linear-gradient(180deg,#140e0e,#0e0b0b);padding:14px 14px 12px;margin:6px 0 22px;animation:fade .5s;box-shadow:inset 0 0 40px rgba(125,30,26,.15)}
+.interro h3{font-family:var(--serif);font-size:15px;letter-spacing:.2em;color:#f1c9c4}
+.it-seals{display:flex;gap:6px;margin:8px 0}
+.it-seal{flex:1;border:1px solid var(--edge2);padding:4px 6px;text-align:center;font-family:var(--serif);font-size:12px;letter-spacing:.08em;position:relative;background:#121418;color:var(--soft)}
+.it-seal.cur{border-color:var(--rust);color:#ff9a90}
+.it-seal.broken{color:var(--faint);border-style:dashed;background:transparent}
+.it-seal.broken::after{content:"开";position:absolute;right:4px;top:-9px;font-family:var(--hand);color:var(--rust);font-size:19px}
+.it-meter{font-family:var(--serif);font-size:12.5px;color:var(--soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.it-meter b{color:var(--rust);font-family:var(--mono);letter-spacing:.2em}
+.it-claim{margin:10px 0;padding:8px 12px;border-left:3px solid var(--rust);background:rgba(176,53,46,.07);font-family:var(--serif);font-size:15px}
+.it-pick{margin-top:8px}
+.it-pick .lab{font-family:var(--mono);font-size:11px;letter-spacing:.25em;color:var(--faint);margin:6px 0 4px}
+.it-tac{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tac{border:1px solid var(--edge2);background:#121418;padding:6px 9px;text-align:left;font-family:var(--serif);font-size:13.5px;color:var(--text)}
+.tac small{display:block;font-size:11px;color:var(--faint)}
+.tac.on{border-color:var(--rust);box-shadow:0 0 0 2px rgba(176,53,46,.2)}
+.tac.hint::after{content:"阮：就这个";font-size:10px;color:var(--rose);margin-left:4px}
+.interro.busy .it-pick{opacity:.4;pointer-events:none}
+
+/* ---------- screens ---------- */
+.screen{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%, #141a22 0%, #050608 70%);overflow:hidden}
+.screen.hide{display:none}
+.rain{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.tbox{position:relative;text-align:center;padding:30px 26px;max-width:500px;width:92%;background:linear-gradient(180deg,rgba(17,20,24,.94),rgba(10,12,15,.96));border:1px solid var(--edge2);box-shadow:0 20px 60px rgba(0,0,0,.6);margin:auto}
+.tbox::before{content:"";position:absolute;left:8px;right:8px;top:8px;bottom:8px;border:1px solid var(--rule);pointer-events:none}
+.corridor{display:block;width:100%;max-width:380px;height:auto;margin:0 auto 6px;position:relative}
+.corridor .d1glow{animation:glow 3.5s ease-in-out infinite}
+@keyframes glow{50%{opacity:.45}}
+.t-kicker{color:var(--faint);letter-spacing:.4em;font-size:11px;margin-bottom:12px;font-family:var(--mono);position:relative}
+.t-main{font-family:var(--serif);font-size:clamp(36px,9vw,54px);letter-spacing:.3em;font-weight:700;color:var(--snow);position:relative;text-shadow:0 0 18px rgba(143,179,201,.25)}
+.t-main span{color:var(--rust)}
+.t-case{font-family:var(--serif);font-size:clamp(15px,4vw,18px);letter-spacing:.32em;color:#f1c9c4;margin:10px 0 4px;position:relative}
+.t-sub{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--soft);position:relative}
+.t-epi{font-family:var(--serif);font-size:13px;color:var(--ice);margin:12px 0 0;position:relative;line-height:1.9;letter-spacing:.12em}
+.t-line{width:48px;height:1px;background:var(--rust);margin:16px auto;position:relative}
+.t-desc{font-size:13.5px;color:var(--soft);line-height:2;margin-bottom:22px;font-family:var(--serif);position:relative;text-align:left;padding:0 8px}
+.t-btn{display:block;width:min(270px,100%);margin:0 auto 8px;padding:11px;border:1px solid var(--rust);border-radius:2px;background:rgba(176,53,46,.12);color:#f1c9c4;font-family:var(--serif);font-size:14.5px;letter-spacing:.28em;transition:.2s;position:relative}
+.t-btn:hover{background:rgba(176,53,46,.26)}
+.t-btn.ghost{border-color:var(--edge2);background:transparent;color:var(--soft);font-size:13px;letter-spacing:.15em}
+.t-btn.ghost:hover{border-color:var(--ice);color:var(--snow)}
+.t-btn.confirming{border-color:var(--rust)!important;color:#ff9a90!important}
+.t-foot{margin-top:18px;font-size:11px;color:var(--faint);line-height:1.8;font-family:var(--serif);position:relative}
+.end-stamp{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.25em;color:var(--rust);border:1px solid var(--rust);padding:4px 12px;margin-bottom:8px;font-weight:700}
+.rank{font-family:var(--serif);font-size:60px;color:var(--snow);line-height:1;position:relative;text-shadow:0 0 18px rgba(176,53,46,.5)}
+.rank-title{font-family:var(--serif);font-size:18px;letter-spacing:.25em;margin:8px 0 14px;color:#f1c9c4;position:relative}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 18px;text-align:left;position:relative}
+.stat{background:#0d1014;border:1px solid var(--edge);border-radius:2px;padding:8px 12px;font-size:12px;color:var(--faint);font-family:var(--serif)}
+.stat b{display:block;font-size:16px;color:var(--snow);letter-spacing:.04em;font-family:var(--mono)}
+.sample-note{border:1px dashed var(--edge2);border-radius:2px;padding:12px 14px;font-size:12.5px;color:var(--soft);margin-bottom:18px;text-align:left;font-family:var(--serif);line-height:1.85;position:relative}
+.sample-note strong{color:#f1c9c4}
+.seal{max-width:520px;text-align:left;background:linear-gradient(180deg,#0f1317,#0a0c0f)}
+.seal .t-kicker{text-align:center}
+.seal p.sp{font-family:var(--serif);font-size:15.5px;line-height:2.2;text-indent:2em;margin-bottom:10px;opacity:0;animation:fade 1.2s forwards;color:var(--text)}
+.seal .last{text-align:center;text-indent:0;letter-spacing:.5em;color:var(--ice);margin-top:18px}
+.seal .phone{opacity:0;animation:fade 1.2s forwards}
+.ach{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--edge);margin-bottom:6px;background:#0d1014;font-family:var(--serif)}
+.ach .ic{font-family:var(--mono);font-size:16px;color:var(--rust);width:28px;text-align:center;border:1px solid var(--edge2);line-height:26px}
+.ach b{display:block;font-size:14px;color:var(--snow)}
+.ach span{font-size:12px;color:var(--faint)}
+.ach.locked .ic,.ach.locked b{color:var(--faint)}
+.endlist{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.endlist div{border:1px solid var(--edge);padding:6px 8px;font-family:var(--serif);font-size:12.5px;color:var(--faint);background:#0d1014}
+.endlist div.got{color:var(--snow);border-color:#5a2a25}
+.endlist div b{font-family:var(--mono);color:var(--rust);margin-right:4px}
+#btnSound.on{color:var(--ice);border-color:var(--ice);background:var(--ice-soft)}
+.reread-tag{display:inline-block;font-family:var(--mono);font-size:10px;color:#d98f86;border:1px solid #d98f86;padding:0 5px;margin-left:6px;letter-spacing:.15em;vertical-align:middle}
+.flash{animation:flash .9s}
+@keyframes flash{0%{box-shadow:inset 0 0 0 9999px rgba(176,53,46,.25)}100%{box-shadow:inset 0 0 80px rgba(0,0,0,.5)}}
+@media (max-width:520px){
+  .brand{font-size:10.5px;padding:2px 5px;letter-spacing:.06em}
+  .tbtn{padding:4px 6px;font-size:11px}
+  .line.narr p{font-size:15.5px}
+  .talk p{font-size:15px}
+  #story{padding:20px 15px 28px}
+  #app{padding:4px 3px 0}
+  .who{font-size:11.5px;padding:2px 7px}
+  .line.talk{gap:8px 10px}
+  .clock small{display:none}
+  .clock b{font-size:12.5px}
+  .survey{padding:12px 8px 8px}
+  .survey .legend{grid-template-columns:1fr}
+  .scene-title{display:none}
+  .hrow{flex-wrap:wrap;gap:6px}
+  .tools{flex-wrap:wrap}
+  .tps{grid-template-columns:1fr}
+  .photo{width:90px}.photo svg{width:80px;height:57px}
+  .chap-card .mnote{position:static;display:block;max-width:none;text-align:right;margin-top:6px}
+}
+@media (prefers-reduced-motion:reduce){.flake,.corridor .d1glow{animation:none}}
+
+.ntimer{border:1px solid var(--rust);background:rgba(176,53,46,.1);padding:7px 12px 8px;margin:0 0 9px;font-family:var(--mono);font-size:12px;color:#f1c9c4;letter-spacing:.08em;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:2px 10px}
+.ntimer .nt-s{font-weight:700;color:var(--snow);font-size:14px}
+.ntimer i{display:block;flex-basis:100%;height:3px;background:#2a1513;margin-top:3px}
+.ntimer i b{display:block;height:100%;width:100%;background:var(--rust);box-shadow:0 0 8px rgba(176,53,46,.6);transition:width .1s linear}
+.ntimer .nt-d{flex-basis:100%;font-size:10.5px;color:var(--faint);letter-spacing:.04em}
+.ntimer.low{animation:pulse 1s ease infinite}
+.card h4 .tag.lv0{color:var(--faint);border-color:var(--edge2)}
+.card h4 .tag.lv1{color:var(--amber);border-color:#6b5a3a}
+.card h4 .tag.lv2{color:var(--green);border-color:#3e5a4c}
+.line.sys.dead span{color:#ff9a90;border-color:var(--rust);background:var(--rust-soft)}
+.line.sys.rule span{color:var(--amber);border-color:#6b5a3a;background:var(--amber-soft)}
+.roster{border:1px solid var(--edge2);background:linear-gradient(180deg,#171b20,#121519);padding:4px 12px;margin-bottom:12px}
+.roster .r{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px dashed var(--rule);font-family:var(--serif);font-size:13.5px}
+.roster .r:last-child{border-bottom:none}
+.roster .r small{display:block;color:var(--faint);font-size:11px;font-family:var(--sans)}
+.roster .r.dead .nm{color:var(--faint);text-decoration:line-through;text-decoration-color:rgba(176,53,46,.6)}
+.roster .s{font-family:var(--mono);font-size:10.5px;border:1px solid var(--edge2);padding:0 6px;white-space:nowrap;border-radius:2px;color:var(--ice)}
+.roster .s.dead{color:var(--rust);border-color:var(--rust)}
+.how{border:1px solid var(--rust);background:var(--rust-soft);color:#f1c9c4;padding:10px 14px;margin:14px 0 18px;font-family:var(--serif);font-size:15px;text-align:left}
+.how b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--rust);margin-bottom:4px}
+.drawer{z-index:90}.mask{z-index:85}
+#controls{display:block}
+.pb-who,.pb-ev{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px;align-items:center}
+.pb-c,.pb-e{border:1px solid var(--edge2);border-radius:2px;padding:4px 11px;font-size:13px;font-family:var(--serif);color:var(--soft);background:rgba(25,29,35,.8)}
+.pb-c.on{border-color:var(--rust);color:#f1c9c4;background:var(--rust-soft)}
+.pb-e{font-size:12px;padding:3px 9px}
+.pb-e.on{border-color:var(--amber);color:var(--amber);background:var(--amber-soft)}
+.pb-evl{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.1em}
+.pb-ask{display:flex;gap:8px;align-items:stretch}
+.pb-ask textarea{flex:1;resize:none;background:#0d1014;border:1px solid var(--edge2);color:var(--text);font-family:var(--serif);font-size:15px;line-height:1.6;padding:8px 10px;border-radius:2px}
+.pb-ask textarea:focus{outline:none;border-color:var(--ice)}
+.pb-send{min-width:64px;border:1px solid var(--rust);background:rgba(176,53,46,.15);color:#f1c9c4;font-family:var(--serif);font-size:15px;letter-spacing:.2em;border-radius:2px}
+.pb-send:disabled{opacity:.5}
+.pb-foot{display:flex;align-items:center;gap:12px;margin-top:8px;font-size:11.5px;color:var(--faint)}
+.pb-foot .btn-ghost{width:auto;padding:6px 14px;margin:0}
+.pb-note{color:var(--faint);font-size:11px;font-style:normal}
+.pb-l{display:block;font-size:12px;color:var(--soft);margin:0 0 8px;font-family:var(--mono)}
+.pb-l input{display:block;width:100%;margin-top:3px;background:#0d1014;border:1px solid var(--edge2);color:var(--text);padding:7px 9px;font-size:13px;border-radius:2px}
+#accBox .chip.on{border-color:var(--rust);color:#f1c9c4}
+#accBox .sub{font-size:12.5px;color:var(--soft);margin-bottom:8px}
+</style>
+</head>
+<body>
+<div id="snowLayer"></div>
+<div id="app">
+  <header>
+    <div class="hrow">
+      <div class="brand">DOOR 01/12</div>
+      <div class="scene-title" id="sceneTitle">雪村 · 盘问</div>
+      <div class="clock" id="clock" title="还能问的次数"><small>还能问</small><b id="clockVal">14</b><span class="dt" id="clockDt"></span></div>
+      <div class="tools">
+        <button class="tbtn" id="btnClues">证物<span class="badge" id="badgeClues"></span></button>
+        <button class="tbtn" id="btnMenu">设置</button>
+      </div>
+    </div>
+    <div class="beat-label"><span id="modeLabel">离线模式</span><span id="beatCount"></span></div>
+  </header>
+  <main id="story"></main>
+  <div id="controls">
+    <div class="choice-prompt" id="askPrompt">&gt; 问谁</div>
+    <div class="pb-who" id="whoRow"></div>
+    <div class="pb-ev" id="evRow"></div>
+    <div class="pb-ask"><textarea id="askBox" rows="2" maxlength="200" placeholder="打字提问，比如：昨晚你在哪儿？（回车发送，Shift+回车换行）"></textarea><button class="pb-send" id="askSend">问</button></div>
+    <div class="pb-foot"><button class="btn-ghost" id="btnAccuse">提交结论</button><span id="hintLine"></span></div>
+  </div>
+</div>
+<div class="mask" id="mask"></div>
+<aside class="drawer" id="drawerClues"><div class="dhead"><h3>证物与线索</h3><button class="x" data-close>关闭</button></div><div class="dbody" id="clueBody"></div></aside>
+<aside class="drawer" id="drawerMenu"><div class="dhead"><h3>设置</h3><button class="x" data-close>关闭</button></div><div class="dbody">
+  <div class="dsec">回答方式</div>
+  <button class="t-btn ghost" id="mMode">回答方式：离线（脚本）</button>
+  <div class="dsec">AI 模式 · OpenAI 兼容接口</div>
+  <label class="pb-l">Base URL<input id="cfgBase" placeholder="https://api.example.com/v1" autocomplete="off"></label>
+  <label class="pb-l">API Key<input id="cfgKey" type="password" placeholder="sk-…（只存在本机浏览器）" autocomplete="off"></label>
+  <label class="pb-l">模型<input id="cfgModel" placeholder="gpt-4o-mini" autocomplete="off"></label>
+  <button class="t-btn ghost" id="cfgSave">保存设置</button>
+  <button class="t-btn ghost" id="cfgTest">测试连接</button>
+  <button class="t-btn ghost" id="cfgClear">清除已存的 Key</button>
+  <div class="board-meta" id="cfgMsg" style="margin:6px 0 10px"></div>
+  <div class="board-meta" style="line-height:1.85"><b>说明</b><br>· 设置只保存在这台设备的浏览器 localStorage 里，不会上传，也不会写进仓库。<br>· 网页版是 https。浏览器会拦下 https 页面对 <b>http://</b> 内网地址（如 http://192.168.3.94:3000/new-api/v1）的请求（混合内容），对方也必须允许跨域（CORS）。<br>· 想用内网接口：把这个 html 下载到本机，直接双击打开（file://），再填 http 地址；接口需返回 Access-Control-Allow-Origin。<br>· 接口失败时，这一问自动改用离线脚本回答，不扣次数。<br>· AI 只负责说话。谁吐出了哪条线索，由引擎核对「出示的证物」后决定，模型乱报的线索会被拒绝。</div>
+  <div class="dsec">其他</div>
+  <button class="t-btn ghost" id="mRestart">重新开始</button>
+</div></aside>
+<div id="toasts"></div>
+<section class="screen" id="titleScreen" style="overflow-y:auto;align-items:flex-start;padding:20px 0">
+  <div class="tbox">
+    <div class="t-kicker">PROTOTYPE B · 自由盘问</div>
+    <div class="t-main">王潇依<span>去</span>哪了</div>
+    <div class="t-case">雪村 · 第三日清早</div>
+    <div class="t-sub">INTERROGATION</div>
+    <p class="t-epi">十四个问题。<br>问出真相，再开口。</p>
+    <div class="t-line"></div>
+    <p class="t-desc">第三日清早，王潇依不见了。她的被窝是冷的，鞋还在床边。<br>你可以去问四个人：村长、木匠、程文、阮白洁。打字问什么都行。<br>他们会撒谎，会躲。拿出对的证物，才撬得开嘴。</p>
+    <button class="t-btn" id="tStart">开始盘问</button>
+    <button class="t-btn ghost" id="tSettings">AI 设置（可选）</button>
+    <p class="t-foot">原型 · 默认离线脚本回答，无需任何 Key。同人改编，台词原创。</p>
+  </div>
+</section>
+<section class="screen hide" id="endScreen" style="overflow-y:auto;align-items:flex-start;padding:30px 0"><div class="tbox" id="endBox"></div></section>
+
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+const story=$('#story'), controls=$('#controls');
+const CFG_KEY='zhiming_protoB_llm', SAVE_KEY='zhiming_protoB_save';
+const MAXQ=14;
+const CHARS={
+ cunzhang:{n:'村长', cls:'c-npc', persona:'雪村的村长，中年男人，穿军绿棉袄，提一盏煤油灯。说话客气，笑容僵硬，处处维护村子的体面，不愿意外乡人追问村里的事。',
+   facts:'村里每年冬天要祭庙里的神。今年请外乡人帮忙造一口棺材。你夜里有提灯巡村的习惯。',
+   lies:'不愿承认夜里看见过什么。除非玩家拿出「王潇依不见了」这件事逼问，否则一口咬定昨夜太平、什么都没看见。绝不主动说庙里那位神要吃人。'},
+ mujiang:{n:'木匠', cls:'c-npc', persona:'村东头的老木匠，六七十岁，眼珠浑浊，抽旱烟，说话阴阳怪气，爱打哑谜，看外乡人像看木料。',
+   facts:'造棺材的流程：先砍树、木料送来、去庙里拜、再填井，棺材才成。井要拿死物填，三天之内，活的不行。昨天傍晚程文一个人来过，借了斧子，还问「死物，人算不算」。',
+   lies:'不拿出村长委托（造棺材）这件事，他就装糊涂，不谈井。没先说出「井要死物填」之前，绝不提程文来过的事。'},
+ cheng:{n:'程文', cls:'c-oth', persona:'过门的老手，进过四扇门，第一天就崩溃了，神经质，易怒，嗓门大，说话急，常带哭腔。',
+   facts:'昨夜后半夜他带王潇依去了井边，杀了她，用她当填井的「死物」。他觉得这样大家能早点出去，王潇依本来就撑不了多久。',
+   lies:'坚称自己一夜没出屋。被拿出村长夜里看见两个人去井边的证词时，才改口说只是出去打了桶水、没见到王潇依。只有同时被拿出「借斧子」和「袖口的血」时，才会崩溃说出真相。'},
+ ruan:{n:'阮白洁', cls:'c-ruan', persona:'和林秋石同屋的姑娘，个子高，嘴甜爱撒娇，叫他「林哥」，实际胆大心细、观察力极强，喜欢逗人，偶尔说话带刺。',
+   facts:'今天一早看见程文一个人从井边回来，袖口是湿的，洗过，还有一圈淡红没洗掉。她怀疑程文，但喜欢让林秋石自己想。',
+   lies:'不会撒大谎，但爱卖关子：没问到程文、可疑的人或她早上看见什么之前，只撒娇打岔，不主动说袖口的事。'}
+};
+const EVID={
+ e_note:{n:'四句提示', d:'一人不入庙，二人不观井，三人不抱树，独自莫凭栏。', start:1},
+ e_task:{n:'村长的委托', d:'村长请大家帮木匠造一口棺材。熊漆说，钥匙多半就在棺材里。', start:1},
+ e_missing:{n:'王潇依不见了', d:'第三日清早，王潇依的被窝是冷的，鞋还在床边。没人听见她出门。', start:1},
+ k_well:{n:'木匠：井要死物填', d:'棺材要成，井得先填上。拿死物填，三天之内，活的不行。', owner:'mujiang', need:['e_task']},
+ k_rope:{n:'木匠：程文借过斧子', d:'昨天擦黑，程文一个人去过木匠家，借了一把斧子，还问「死物，人算不算」。', owner:'mujiang', need:['k_well']},
+ k_lamp:{n:'村长：夜里井边有两个人', d:'后半夜，村长提灯巡村，看见两个人往木楼院子后头的井边走。前头那个穿红棉袄，后头是个男人，走路拖脚。', owner:'cunzhang', need:['e_missing']},
+ k_sleeve:{n:'阮白洁：袖口的淡红', d:'今早程文一个人从井边回来，袖口湿了，洗过，还剩一圈淡红没洗掉。', owner:'ruan', need:[]},
+ k_slip:{n:'程文改口', d:'被问到村长的证词，程文改口说自己出去打了桶水，「没见着她」。可村长看见的是两个人。', owner:'cheng', need:['k_lamp']},
+ k_confess:{n:'程文的供词', d:'「木匠说要死物……三天之内……我只是想快点出去！她本来就撑不了几天——」', owner:'cheng', need:['k_rope','k_sleeve']},
+ k_ghost:{n:'村长：死在人手里的会回来', d:'「死在人手里的，夜里会回来。回来找那个人。」', owner:'cunzhang', need:['k_slip']}
+};
+/* 离线脚本：关键词意图 + 证物门槛 + 说谎 */
+const OFF={
+ cunzhang:[
+  {k:['昨晚','昨夜','夜里','半夜','晚上','后半夜','看见','看到','巡','灯','王潇依','红棉袄','姑娘','失踪','不见','人呢'], ev:['e_missing'], clue:'k_lamp',
+   a:['（灯芯跳了一下）……那姑娘不见了？唉。后半夜我提灯走过你们院子后头，是看见两个人往井边去。前头那个穿红棉袄。后头是个男的，个子不高，走路拖着脚。'],
+   lie:['夜里？夜里大家都睡了。村里太平得很，什么事都没有。','后生，雪夜里谁出门？你们城里人就是想得多。']},
+  {k:['鬼','回来','报应','死了会','死的人','会怎样','杀人'], ev:['k_slip'], clue:'k_ghost', a:['（他把灯放下了）……我们这儿的老话：死在人手里的，夜里会回来。回来找那个人。'], lie:['这话可不兴乱说。村里没有鬼，只有神。']},
+  {k:['棺材','委托','造','钥匙'], a:['村里想造一口棺材，劳烦各位给木匠搭把手。造好了，大家都好。','木匠那边，你们去问他就是。我只管请人。']},
+  {k:['神','庙','祭','供','女人','长发'], a:['庙里供的是保佑村子的神。每年冬天都要祭。今年……今年牲口死得早。','（笑容僵了一下）神的事，外乡人少打听。']},
+  {k:['井'], a:['井？院子里那口井一直好好的。','井是村里的命根子，别往里扔东西。']},
+  {k:['程文'], a:['哪个是程文？那个嗓门大的后生？他昨天倒是往木匠家跑了一趟。','你们自己人，你们自己清楚。']},
+  {k:['木匠'], a:['老木匠脾气怪，可手艺是真的好。','他说什么，你们照做就是。']},
+  {k:['阮白洁','阮'], a:['那个高个子姑娘？好看是好看，就是看人的眼神……不像个姑娘家。']},
+  {k:['你是谁','名字','村长'], a:['我是这儿的村长。你们在村里有什么事，找我就行。']},
+  {_def:1, a:['（他提着灯，笑而不答）','后生，有些事，问多了不好。','村里一切都好。你们安心把棺材做好。']}
+ ],
+ mujiang:[
+  {k:['程文','谁来过','借','斧','别人','问过','来过','绳'], ev:['k_well'], clue:'k_rope',
+   a:['（他咧嘴笑了）你倒是第二个来问死物的。昨天擦黑，那个嗓门大的后生一个人来过，借了我一把斧子。他问我：死物，人算不算。'],
+   lie:['谁？不认得。你们外乡人长得都一样。','我这儿天天有人来，记不住。']},
+  {k:['人算不算','人算','人也算'], ev:['k_well'], clue:'k_rope', a:['（他盯着你看了很久）……这话，昨天也有人问过我。那个嗓门大的。还借走了我的斧子。'], lie:['你问得怪。']},
+  {k:['井','填','死物','流程','步骤','怎么做','棺材','拜','砍树','三天'], ev:['e_task'], clue:'k_well',
+   a:['（吐了口烟）村长请你们来的？……那我就说了。棺材要成，井得先填上。拿死物填，三天之内。活的不行。'],
+   lie:['后生，你问这个做什么？外乡人管好自己的事。','（他慢慢磕着烟袋）井就是井，有什么好问的。']},
+  {k:['庙','神','女人','长发'], a:['拜一拜就好。别一个人进去。','庙里那位，喜欢热闹。']},
+  {k:['王潇依','失踪','不见','姑娘'], a:['少了一个？（他像在算账）……那井快满了吧。','人少了，木料也就省了。']},
+  {k:['鬼','回来','报应'], a:['门里的东西都有灵。死在谁手上，就记着谁。']},
+  {k:['你是谁','名字','木匠'], a:['做棺材的。也做别的，不过今年只做棺材。']},
+  {_def:1, a:['（他只是抽烟）','后生，你话太多了。','问我？不如去问问你身边的人。']}
+ ],
+ cheng:[
+  {k:['斧','借','袖','血','红','为什么','杀','死物','木匠','承认','是不是你'], need:['k_rope','k_sleeve'], clue:'k_confess',
+   a:['（他的脸一下子白了）……木匠说要死物，三天之内……我只是想快点出去！她本来就撑不了几天，她自己都说了——','我们会死在这儿的！总得有人先……我只是想快点出去！'],
+   lie:['你什么意思？你怀疑我？你们新人懂个屁！','（他吼起来）别血口喷人！我进过四扇门，我比你清楚怎么活！']},
+  {k:['昨晚','昨夜','夜里','半夜','出去','出门','井','看见','村长','撒谎','说谎','屋','两个人','打水'], ev:['k_lamp'], clue:'k_slip',
+   a:['……我是出去过！就去打了桶水！我没见着她！村长那老东西眼花了！'],
+   lie:['我一晚上都在屋里！没出过门！你问阮白洁去！','你凭什么问我？我昨晚睡得死死的！']},
+  {k:['王潇依','失踪','不见','她'], a:['她？她自己跑了吧！她早就不想活了，天天哭——','关我什么事！你去问她自己！']},
+  {k:['鬼','回来','报应'], a:['（他声音发抖）你别吓我……别跟我说这个……']},
+  {k:['门','出去','钥匙','活'], a:['我进过四扇门了。四扇！第一天就死两个的，从来没有过……','只要把棺材做出来，我们就能走了。对吧？对吧！']},
+  {k:['你是谁','名字','程文'], a:['程文。老手。比你们这些新人强。']},
+  {_def:1, a:['（他抱着胳膊，不看你）','别烦我！','你们新人就会问东问西！']}
+ ],
+ ruan:[
+  {k:['程文','可疑','怀疑','看见','早上','今早','发现','奇怪','袖','血','谁'], clue:'k_sleeve',
+   a:['林哥终于想到问我啦。今天一早，我看见程文一个人从井边回来。袖口湿的，洗过，还剩一圈淡红没洗掉。你说，大清早的，他去井边洗什么呢？']},
+  {k:['王潇依','失踪','不见'], a:['她昨晚睡前还在哭呢。林哥，人不是自己走的——鞋还在床边呢。','（她托着腮）一个人要是自己走，总得穿鞋吧？']},
+  {k:['井','填','死物'], a:['二人不观井呀，林哥。……昨晚井边，可不止一个人。','你去问问木匠，填井要用什么。']},
+  {k:['村长'], a:['村长每晚都提着灯转悠。他肯定看见了什么，就是不肯说。拿王潇依不见了的事去问他呀。']},
+  {k:['木匠'], a:['那老头子吓唬一下就肯说了。你拿着村长的委托去，他就没法装傻。']},
+  {k:['鬼','回来','报应'], a:['在门里杀人的人，活不长。林哥你可别学。']},
+  {k:['你是谁','名字','阮','喜欢','怕'], a:['林哥你又逗我。人家好害怕的～（她一点都不像害怕）','我叫阮白洁呀。你记性真差。']},
+  {_def:1, a:['林哥，你问我还不如问问别人？','（她眨眨眼）你猜。','嗯……我饿了，你问完了吗？']}
+ ]
+};
+let S=null, CFG=loadCfg(), sending=false;
+function loadCfg(){ try{ return Object.assign({mode:'offline',base:'',key:'',model:''}, JSON.parse(localStorage.getItem(CFG_KEY))||{}); }catch(e){ return {mode:'offline',base:'',key:'',model:''}; } }
+function saveCfg(){ try{ localStorage.setItem(CFG_KEY, JSON.stringify(CFG)); }catch(e){} }
+function fresh(){ return {q:0, who:'ruan', ev:Object.keys(EVID).filter(k=>EVID[k].start), att:[], hist:{cunzhang:[],mujiang:[],cheng:[],ruan:[]}, used:{}, log:[], rejected:0, done:false}; }
+function el(t,c,x){ const e=document.createElement(t); if(c) e.className=c; if(x!=null) e.textContent=x; return e; }
+function toast(m){ const b=$('#toasts'); while(b.children.length>=2) b.firstChild.remove(); const t=el('div','toast',m); b.appendChild(t); setTimeout(()=>t.remove(),2600); }
+function scrollDown(){ requestAnimationFrame(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})); }
+function sys(t,cls){ const d=el('div','line sys'+(cls?' '+cls:'')); d.appendChild(el('span',null,t)); story.appendChild(d); scrollDown(); return d; }
+function say(who,t,cls,note){ const d=el('div','line talk'); d.appendChild(el('span','who '+cls,who)); const p=el('p',null,t); if(note) p.appendChild(el('small','pb-note',' '+note)); d.appendChild(p); story.appendChild(d); scrollDown(); return d; }
+function persist(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
+function allowed(cid){ // 本轮可透露的线索：属于此人、未出、门槛证物都已出示
+  return Object.keys(EVID).filter(k=>EVID[k].owner===cid && !S.ev.includes(k) && EVID[k].need.every(x=>S.att.includes(x)));
+}
+function norm(s){ return String(s||'').replace(/\s+/g,'').toLowerCase(); }
+function offlineAnswer(cid, q){
+  const t=norm(q), list=OFF[cid];
+  const hit=e=>(e.k||[]).some(k=>t.includes(k)) || (e.ev||[]).some(x=>S.att.includes(x)&&t.length<4);
+  let e=list.find(x=>x.clue && hit(x)) || list.find(x=>!x._def && hit(x)) || list.find(x=>x._def);
+  // 只出示证物、不打字：按证物找话题
+  if(!t && S.att.length) e=list.find(x=>x.clue && (x.ev||x.need||[]).some(v=>S.att.includes(v))) || list.find(x=>x._def);
+  const key=cid+':'+list.indexOf(e); const n=S.used[key]=(S.used[key]||0)+1;
+  if(e.clue){
+    const ok=EVID[e.clue].need.every(x=>S.att.includes(x)) && !S.ev.includes(e.clue);
+    if(ok) return {text:e.a[(n-1)%e.a.length], clue:e.clue};
+    if(S.ev.includes(e.clue)) return {text:e.a[(n-1)%e.a.length]};
+    return {text:(e.lie||list.find(x=>x._def).a)[(n-1)%(e.lie||list.find(x=>x._def).a).length]};
+  }
+  return {text:e.a[(n-1)%e.a.length]};
+}
+function offlineWouldReveal(cid,q){ const r=offlineAnswer(cid,q); const key=Object.keys(S.used); return r.clue||null; }
+function buildPrompt(cid){
+  const c=CHARS[cid], al=allowed(cid);
+  return '你在一款中文文字推理游戏里扮演「'+c.n+'」。背景：网络小说《死亡万花筒》第一扇门「雪村」的同人改编。外乡人被困在雪山村子里，要造一口棺材找到钥匙才能离开。第三日清早，外乡人王潇依失踪了。玩家扮演林秋石，正在盘问你。\n'+
+  '【人物】'+c.persona+'\n【你知道的事】'+c.facts+'\n【秘密与说谎规则】'+c.lies+'\n'+
+  '【回答要求】\n1. 只用中文，以'+c.n+'的口吻直接说话，1到3句，不超过90字；可以带一个括号里的小动作；不要旁白、不要提到游戏或AI。\n'+
+  '2. 本轮玩家出示的证物：'+(S.att.length?S.att.map(k=>EVID[k].n+'（'+EVID[k].d+'）').join('；'):'无')+'。\n'+
+  '3. 本轮你【可以】透露的线索：'+(al.length?al.map(k=>k+'：'+EVID[k].d).join('；'):'无')+'。只有当玩家的问题确实问到相关内容时才透露；透露时，在回答最后另起一行写 [CLUE:线索id]。\n'+
+  '4. 不在可透露列表里的秘密，一律按说谎规则回避或撒谎，绝不能说出来，也不要输出任何其他 [CLUE:...] 标签。';
+}
+async function llmAnswer(cid,q){
+  const base=(CFG.base||'').trim().replace(/\/+$/,''); if(!base) throw new Error('未填写 Base URL');
+  const msgs=[{role:'system',content:buildPrompt(cid)}];
+  S.hist[cid].slice(-8).forEach(h=>{ msgs.push({role:'user',content:h.q}); msgs.push({role:'assistant',content:h.a}); });
+  msgs.push({role:'user',content:(S.att.length?'（我拿出了：'+S.att.map(k=>EVID[k].n).join('、')+'）':'')+(q||'你看看这个。')});
+  const ac=new AbortController(); const to=setTimeout(()=>ac.abort(),30000);
+  try{
+    const r=await fetch(base+'/chat/completions',{method:'POST',signal:ac.signal,headers:Object.assign({'Content-Type':'application/json'},CFG.key?{'Authorization':'Bearer '+CFG.key}:{}),body:JSON.stringify({model:CFG.model||'gpt-4o-mini',messages:msgs,temperature:0.7,max_tokens:300})});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const j=await r.json(); const txt=j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;
+    if(typeof txt!=='string') throw new Error('返回格式不对');
+    return txt;
+  } finally { clearTimeout(to); }
+}
+function parseTags(txt, cid){
+  const al=allowed(cid), tags=[...txt.matchAll(/\[\s*CLUE\s*[:：]\s*([A-Za-z0-9_]+)\s*\]/g)].map(m=>m[1]);
+  const ok=tags.filter((t,i)=>al.includes(t) && tags.indexOf(t)===i), bad=tags.filter(t=>!al.includes(t));
+  const clean=txt.replace(/\[\s*CLUE\s*[:：][^\]]*\]/g,'').replace(/\n{2,}/g,'\n').trim();
+  return {clean, ok, bad};
+}
+function reveal(id){ if(S.ev.includes(id)) return; S.ev.push(id); sys('[ 线索 ] '+EVID[id].n+' — 已记录，可以拿去问别人'); toast('获得线索 · '+EVID[id].n); badge(); renderEv(); }
+async function ask(){
+  if(sending || S.done) return;
+  const q=$('#askBox').value.trim(); if(!q && !S.att.length){ toast('先打字，或者点一件证物'); return; }
+  if(S.q>=MAXQ){ toast('问题用完了，该下结论了'); return; }
+  const cid=S.who, c=CHARS[cid];
+  sending=true; $('#askSend').disabled=true;
+  const qline=(S.att.length?'（拿出：'+S.att.map(k=>EVID[k].n).join('、')+'）':'')+(q||'');
+  say('林秋石', qline, 'c-lin'); $('#askBox').value='';
+  let text, clues=[], note='', counted=true;
+  if(CFG.mode==='ai'){
+    const wait=sys('……'+c.n+'在想');
+    try{
+      const raw=await llmAnswer(cid,q); wait.remove();
+      const p=parseTags(raw,cid); text=p.clean||'……'; clues=p.ok;
+      const off=offlineAnswer(cid,q); if(off.clue && !clues.includes(off.clue) && allowed(cid).includes(off.clue)){ clues.push(off.clue); note='（引擎判定：这一问已经问到了点子上）'; }
+      if(p.bad.length){ S.rejected+=p.bad.length; sys('[ 引擎 ] 拒绝了 '+p.bad.length+' 个没有证物支撑的线索标签：'+p.bad.join('、'),'dead'); }
+    }catch(err){ wait.remove(); sys('[ AI 接口失败：'+(err.name==='AbortError'?'超时':err.message)+' ] 这一问改用离线脚本回答，不扣次数'); const o=offlineAnswer(cid,q); text=o.text; if(o.clue) clues=[o.clue]; counted=false; note='（离线兜底）'; }
+  } else { const o=offlineAnswer(cid,q); text=o.text; if(o.clue) clues=[o.clue]; }
+  if(counted) S.q++;
+  S.hist[cid].push({q:qline,a:text}); S.log.push({who:cid,q:qline,a:text});
+  say(c.n, text, c.cls, note);
+  clues.forEach(reveal);
+  S.att=[]; renderEv(); renderHead(); persist();
+  sending=false; $('#askSend').disabled=false;
+  if(S.q>=MAXQ) { sys('[ 十四个问题用完了 ] 该下结论了。'); openAccuse(); }
+}
+function renderWho(){ const r=$('#whoRow'); r.innerHTML=''; Object.keys(CHARS).forEach(k=>{ const b=el('button','pb-c'+(S.who===k?' on':''),CHARS[k].n); b.dataset.c=k; b.onclick=()=>{ S.who=k; renderWho(); $('#askPrompt').textContent='> 问 '+CHARS[k].n; persist(); }; r.appendChild(b); }); $('#askPrompt').textContent='> 问 '+CHARS[S.who].n; }
+function renderEv(){ const r=$('#evRow'); r.innerHTML=''; r.appendChild(el('span','pb-evl','出示：')); S.ev.forEach(k=>{ const b=el('button','pb-e'+(S.att.includes(k)?' on':''),EVID[k].n); b.dataset.e=k; b.onclick=()=>{ const i=S.att.indexOf(k); if(i>=0) S.att.splice(i,1); else S.att.push(k); renderEv(); }; r.appendChild(b); }); }
+function renderHead(){ $('#clockVal').textContent=String(MAXQ-S.q); $('#clock').classList.toggle('night', MAXQ-S.q<=4); $('#modeLabel').textContent=CFG.mode==='ai'?'AI 模式 · '+(CFG.model||'gpt-4o-mini'):'离线模式（脚本回答）'; $('#beatCount').textContent='线索 '+S.ev.filter(k=>!EVID[k].start).length+' / 7'; $('#hintLine').textContent=S.q?'':'提示：选一个人，打字提问；点下面的证物可以一起拿给对方看。'; }
+function badge(){ const n=S.ev.filter(k=>!EVID[k].start).length; $('#badgeClues').textContent=n||''; $('#badgeClues').style.display=n?'':'none'; }
+function renderClues(){ const b=$('#clueBody'); b.innerHTML=''; b.appendChild(el('p','board-meta','点击问话框下方的证物，可以把它一起拿给对方看。有些人只有被拿出对的证物，才肯说实话。'));
+  b.appendChild(el('div','dsec','开局就有的'));
+  S.ev.filter(k=>EVID[k].start).forEach(k=>b.appendChild(card(k)));
+  b.appendChild(el('div','dsec','问出来的'));
+  const got=S.ev.filter(k=>!EVID[k].start); if(!got.length) b.appendChild(el('p','board-meta','还没有。'));
+  got.forEach(k=>b.appendChild(card(k)));
+  const left=Object.keys(EVID).filter(k=>!EVID[k].start && !S.ev.includes(k)).length; for(let i=0;i<left;i++){ const d=el('div','card locked'); d.innerHTML='<h4>[ 未问出 ]</h4><p>某个人还瞒着什么</p>'; b.appendChild(d); }
+}
+function card(k){ const d=el('div','card'); const h=el('h4'); h.appendChild(el('span',null,EVID[k].n)); if(EVID[k].owner) h.appendChild(el('span','tag',CHARS[EVID[k].owner].n)); d.appendChild(h); d.appendChild(el('p',null,EVID[k].d)); return d; }
+function openDrawer(n){ closeDrawer(); $('#drawer'+n[0].toUpperCase()+n.slice(1)).classList.add('open'); $('#mask').classList.add('show'); if(n==='clues') renderClues(); if(n==='menu') fillCfg(); }
+function closeDrawer(){ document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('open')); $('#mask').classList.remove('show'); }
+function fillCfg(){ $('#cfgBase').value=CFG.base||''; $('#cfgKey').value=CFG.key||''; $('#cfgModel').value=CFG.model||''; $('#mMode').textContent='回答方式：'+(CFG.mode==='ai'?'AI（OpenAI 兼容接口）':'离线（脚本）'); }
+/* ---- 结论 ---- */
+const CULPRITS=[['cheng','程文'],['cunzhang','村长'],['mujiang','木匠'],['ruan','阮白洁'],['self','她自己走丢了'],['god','庙里那东西']];
+const MOTIVES=[['well','拿她当填井的「死物」'],['rob','抢她身上的东西'],['saw','她撞见了不该看的'],['none','没有理由，是被附了身']];
+function openAccuse(){
+  const old=$('#accBox'); if(old) old.remove();
+  const box=el('div','board'); box.id='accBox';
+  box.appendChild(el('h3',null,'结论 · 王潇依去哪了')); box.appendChild(el('div','sub','选一个人，一个理由。说出口就不能收回。'));
+  let who=null, why=null;
+  const mk=(title,opts,set)=>{ box.appendChild(el('div','wb-sec',title)); const row=el('div','wb-row'); opts.forEach(([id,t])=>{ const b=el('button','chip',t); b.dataset.a=id; b.onclick=()=>{ set(id); row.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===b)); go.disabled=!(who&&why); }; row.appendChild(b); }); box.appendChild(row); };
+  mk('谁',CULPRITS,v=>who=v); mk('为什么',MOTIVES,v=>why=v);
+  const go=el('button','t-btn','说出结论'); go.id='accGo'; go.disabled=true; go.style.marginTop='12px'; go.onclick=()=>finish(who,why); box.appendChild(go);
+  story.appendChild(box); box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function finish(who,why){
+  S.done=true; persist(); localStorage.removeItem(SAVE_KEY);
+  const right=who==='cheng'&&why==='well', got=S.ev.filter(k=>!EVID[k].start);
+  const proof=got.includes('k_well') && (got.includes('k_lamp')||got.includes('k_sleeve')) && got.includes('k_confess');
+  const box=$('#endBox'); box.innerHTML='';
+  box.appendChild(el('div','t-kicker','SYSTEM · 结论'));
+  box.appendChild(el('div','end-stamp', right?(proof?'CASE CLOSED':'RIGHT · THIN PROOF'):'WRONG'));
+  box.appendChild(el('div','t-case', right?(proof?'真相：程文为了填井，杀了王潇依':'猜对了，但证据不够'):'说错了'));
+  const st=el('div','stats'); [['用掉的问题',S.q+' / '+MAXQ],['问出的线索',got.length+' / 7'],['程文的供词',got.includes('k_confess')?'问出来了':'没有'],['被拒绝的 AI 线索',String(S.rejected)]].forEach(([k,v])=>{ const s=el('div','stat',k); s.appendChild(el('b',null,v)); st.appendChild(s); }); box.appendChild(st);
+  box.appendChild(el('p','t-desc', right ? (proof ? '你把木匠的话、村长的灯、阮白洁看见的袖口，一件一件摆在程文面前。他没再吼。熊漆把他推出了门外，谁都没说话。那天夜里，隔壁传来了女人的哭声。' : '你说对了。可程文咬死不认，熊漆看了你很久，最后只说：「证据呢？」那天夜里，隔壁传来了女人的哭声——门替你作了证。') : '你说出口的那一刻，程文松了一口气。真正的答案还在井里。那天夜里，隔壁传来了女人的哭声，可她不是来找你的。'));
+  const b=el('button','t-btn','再问一次'); b.onclick=()=>{ $('#endScreen').classList.add('hide'); start(); }; box.appendChild(b);
+  $('#endScreen').classList.remove('hide');
+}
+/* ---- 启动 ---- */
+function start(){ S=fresh(); story.innerHTML=''; $('#titleScreen').classList.add('hide');
+  const card=el('div','chap-card'); card.appendChild(el('div','chap-stamp','DOOR 01 · LIVE')); card.appendChild(el('small',null,'独自莫凭栏 · 第三日清早')); card.appendChild(el('h2',null,'王潇依去哪了')); const tm=el('div','chap-time'); tm.innerHTML='还能问 <b>'+MAXQ+'</b> 个问题'; card.appendChild(tm); story.appendChild(card);
+  [['','天刚亮。王潇依的被窝是冷的，鞋还在床边。'],['熊漆','人不会光着脚走进雪里。你去问。村长、木匠、程文，还有你屋里那位。'],['熊漆','问清楚再开口。说错了人，门里是会记仇的。']].forEach(([w,t])=>{ if(!w){ const d=el('div','line narr'); d.appendChild(el('p',null,t)); story.appendChild(d);} else say(w,t,'c-vet'); });
+  renderWho(); renderEv(); renderHead(); badge(); persist(); }
+$('#tStart').onclick=start;
+$('#tSettings').onclick=()=>openDrawer('menu');
+$('#askSend').onclick=ask;
+$('#askBox').addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); ask(); } });
+$('#btnAccuse').onclick=openAccuse;
+$('#btnClues').onclick=()=>openDrawer('clues'); $('#btnMenu').onclick=()=>openDrawer('menu');
+$('#mask').onclick=closeDrawer; document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeDrawer);
+$('#mMode').onclick=()=>{ CFG.mode=CFG.mode==='ai'?'offline':'ai'; saveCfg(); fillCfg(); if(S) renderHead(); toast(CFG.mode==='ai'?'已切到 AI 模式':'已切到离线模式'); };
+$('#cfgSave').onclick=()=>{ CFG.base=$('#cfgBase').value.trim(); CFG.key=$('#cfgKey').value.trim(); CFG.model=$('#cfgModel').value.trim(); saveCfg(); $('#cfgMsg').textContent='已保存在本机浏览器。'+(location.protocol==='https:'&&/^http:/i.test(CFG.base)?' 注意：https 页面无法请求 http 接口（混合内容），请下载到本地用 file:// 打开。':''); if(S) renderHead(); };
+$('#cfgClear').onclick=()=>{ CFG.key=''; saveCfg(); fillCfg(); $('#cfgMsg').textContent='已清除 Key。'; };
+$('#cfgTest').onclick=async()=>{ $('#cfgSave').click(); $('#cfgMsg').textContent='测试中……'; try{ const base=CFG.base.replace(/\/+$/,''); const r=await fetch(base+'/chat/completions',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},CFG.key?{'Authorization':'Bearer '+CFG.key}:{}),body:JSON.stringify({model:CFG.model||'gpt-4o-mini',messages:[{role:'user',content:'只回答两个字：收到'}],max_tokens:10})}); const j=await r.json(); $('#cfgMsg').textContent=r.ok?'连接成功：'+String(j.choices&&j.choices[0].message.content).slice(0,30):'失败：HTTP '+r.status; }catch(e){ $('#cfgMsg').textContent='失败：'+e.message+'（可能是混合内容、CORS 或地址不对）'; } };
+$('#mRestart').onclick=()=>{ closeDrawer(); start(); };
+(function(){ const L=$('#snowLayer'); for(let i=0;i<28;i++){ const f=el('div','flake'); f.style.left=(Math.random()*100)+'%'; f.style.animationDuration=(9+Math.random()*12)+'s'; f.style.animationDelay=(-Math.random()*20)+'s'; f.style.opacity=(.15+Math.random()*.4).toFixed(2); f.style.setProperty('--dx',(Math.random()*60-30)+'px'); L.appendChild(f); } })();
+(function(){ let sv=null; try{ sv=JSON.parse(localStorage.getItem(SAVE_KEY)); }catch(e){} if(sv && !sv.done && sv.q>0){ const b=el('button','t-btn ghost','继续上次的盘问'); b.id='tContinue'; b.onclick=()=>{ start(); S=Object.assign(fresh(),sv); story.appendChild(el('div','line sys')).appendChild(el('span',null,'[ 已恢复：用掉 '+S.q+' 问 · 线索 '+S.ev.filter(k=>!EVID[k].start).length+' 条 ]')); renderWho(); renderEv(); renderHead(); badge(); }; $('#tSettings').before(b); } })();
+
+</script>
+</body>
+</html>
