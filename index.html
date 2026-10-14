@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0a0c0f">
+<meta name="theme-color" content="#000000">
 <title>致命游戏 · 第一扇门《独自莫凭栏》— 同人文字冒险</title>
 <style>
 :root{
@@ -357,6 +357,113 @@ header::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;back
   .chap-card .mnote{position:static;display:block;max-width:none;text-align:right;margin-top:6px}
 }
 @media (prefers-reduced-motion:reduce){.flake,.corridor .d1glow{animation:none}}
+/* ===== v2：别墅 + 极简黑白 ===== */
+:root{--bg:#000;--bg2:#000;--panel:#000;--panel2:#0a0a0a;--edge:#262626;--edge2:#3a3a3a;--text:#ececec;--soft:#a8a8a8;--faint:#666;--rule:#1e1e1e;
+ --snow:#fff;--ice:#d0d0d0;--ice-soft:rgba(255,255,255,.06);--rust:#e6e6e6;--rust-soft:rgba(255,255,255,.06);--blood:#888;--amber:#cfcfcf;--amber-soft:rgba(255,255,255,.05);
+ --rose:#bdbdbd;--rose-soft:rgba(255,255,255,.05);--green:#bdbdbd;--oth:#9a9a9a;--red:#d0161f}
+body{background:#000!important;background-image:none!important;color:#ececec}
+#snowLayer{display:none}
+#app{max-width:680px;padding:0 0 0}
+header{background:rgba(0,0,0,.92)!important;border:none!important;padding:8px 18px 4px!important;backdrop-filter:none}
+header::before{display:none}
+.brand{border:none!important;background:none!important;font-size:10px;letter-spacing:.3em;color:#777!important;padding:0!important;font-weight:400}
+.brand::before{display:none}
+.scene-title{font-size:11px;color:#555;letter-spacing:.1em}
+.clock{background:none!important;border:none!important;box-shadow:none!important;padding:0!important;font-size:10px!important;color:#888!important}
+.clock b,.clock small{color:#888!important;font-size:10px!important;font-weight:400!important;text-shadow:none!important}
+.clock.night b{color:#ddd!important}
+.tbtn{border:none!important;background:none!important;font-size:11px;color:#777;padding:2px 5px;letter-spacing:.12em}
+.tbtn:hover{color:#fff}
+.tbtn .badge{background:none!important;color:#fff!important;border:none;position:static;font-size:9px;min-width:0;margin-left:2px;box-shadow:none}
+.tbtn.pulse{animation:none}
+.beats,.beat-label{display:none!important}
+#toasts{position:static!important;transform:none!important;width:auto!important;max-width:none!important;height:16px;display:block!important;text-align:right;overflow:hidden;margin-top:2px}
+.toast{display:inline-block;background:none!important;border:none!important;padding:0!important;font-size:10.5px!important;color:#8a8a8a!important;letter-spacing:.12em;animation:tline 2.8s forwards!important;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.toast::before{content:"＋ "}
+@keyframes tline{0%{opacity:0}10%{opacity:1}80%{opacity:1}100%{opacity:0}}
+#story{background:#000!important;border:none!important;box-shadow:none!important;padding:48px 28px 60px!important}
+#story.pov-ruan{background:#000!important}
+.chap-card{background:none!important;border:none!important;box-shadow:none!important;padding:0!important;margin:0 0 56px!important;text-align:left}
+.chap-card::before,.chap-card::after,.chap-stamp,.chap-card .mnote{display:none!important}
+.chap-card small{color:#555;font-size:11px;letter-spacing:.3em}
+.chap-card h2{font-size:30px;font-weight:400;letter-spacing:.3em;color:#fff;margin:10px 0 6px}
+.chap-time{font-size:11px;color:#555!important;letter-spacing:.15em}
+.chap-time b{color:#888!important;font-weight:400}
+.line{margin:0 0 26px!important;animation:lineIn .7s ease both}
+@keyframes lineIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.line p{color:#e8e8e8;font-size:17px;line-height:2.05;letter-spacing:.04em}
+.line.narr p{color:#d8d8d8}
+.line.talk .who{background:none!important;border:none!important;color:#7a7a7a!important;padding:0!important;font-size:11px;letter-spacing:.25em;display:block;margin-bottom:2px}
+.line.act p{color:#9a9a9a;font-style:normal}
+.line.sense{border:none!important;background:none!important;padding:0 0 0 18px!important;border-left:1px solid #333!important}
+.line.sense p{color:#9c9c9c!important}
+.line.sense::before{color:#555!important}
+.line.sys{background:none!important;border:none!important;color:#888;text-align:center;letter-spacing:.2em;font-size:12px}
+.line.key p,.line.key span,.line.sys.key span{color:var(--red)!important}
+.line.key .who{color:#b0151c!important}
+.fs-mark{border-bottom:1px solid var(--red)!important;background:none!important}
+#controls{background:linear-gradient(0deg,#000 75%,rgba(0,0,0,0))!important;border:none!important;padding:14px 28px calc(18px + env(safe-area-inset-bottom))!important}
+#controls .choice-prompt{background:#000!important;box-shadow:0 -10px 12px 4px #000!important;color:#666;letter-spacing:.25em;font-size:11px}
+.btn-next{background:none!important;border:none!important;border-top:1px solid #222!important;border-radius:0!important;color:#bbb!important;box-shadow:none!important;letter-spacing:.4em}
+.btn-next .k{color:#444!important}
+.btn-next:hover{color:#fff!important}
+.ctl-row{display:flex;align-items:stretch;gap:8px}.ctl-row .btn-next{flex:1}
+.btn-skip{color:#555;font-size:11px;letter-spacing:.2em;padding:0 6px;border-top:1px solid #222}
+.btn-skip:hover{color:#ddd}
+.choice{background:none!important;border:1px solid #2e2e2e!important;border-radius:0!important;color:#ddd!important;box-shadow:none!important}
+.choice:hover{border-color:#fff!important;color:#fff!important}
+.choice::before{color:#555!important;background:none!important;border:none!important}
+.choice.crit{border-color:#5a1013!important}
+.choice.crit:hover{border-color:var(--red)!important}
+.choice.crit::before{color:var(--red)!important}
+/* 交互组件：单色线稿 */
+.survey,.quiz,.read,.board,.interro,.phone,.bilu{background:#000!important;border:1px solid #262626!important;box-shadow:none!important;border-radius:0!important}
+.survey svg,.board svg,.interro svg,.card svg,.photo,.photo svg,.rd-frag,.survey .sv-map{filter:grayscale(1) contrast(1.15)}
+.survey *,.quiz *,.board *,.interro *,.read *{text-shadow:none!important}
+.opt,.chip,.tac,.tp,.wb-row>*{background:none!important;border-color:#333!important;color:#ccc!important;border-radius:0!important;box-shadow:none!important}
+.opt.sel,.chip.sel,.tac.sel,.tp.sel,.opt.on,.chip.on,.tac.on,.tp.on,.tp.active{border-color:#fff!important;color:#fff!important}
+.opt.wrong,.q.wrong .opt.sel,.strike,.wrong{color:var(--red)!important;border-color:var(--red)!important}
+.quiz .q-rule,.quiz h4{color:var(--red)!important}
+.drawer{background:#000!important;border-left:1px solid #222!important;z-index:95!important}
+.mask{z-index:90!important;background:rgba(0,0,0,.8)!important}
+.card{background:#050505!important;border:1px solid #262626!important;box-shadow:none!important;border-radius:0!important}
+.screen{background:#000!important}
+.tbox{background:#000!important;border:none!important;box-shadow:none!important}
+.tbox::before{display:none}
+.t-btn{border:1px solid #444!important;background:none!important;color:#eee!important;border-radius:0!important;letter-spacing:.3em}
+.t-btn:hover{border-color:#fff!important}
+.t-btn.ghost{border-color:#222!important;color:#999!important}
+.t-btn.confirming{border-color:var(--red)!important;color:var(--red)!important}
+/* 别墅 */
+#titleScreen{overflow-y:auto;align-items:flex-start;padding:0}
+.villa{width:100%;max-width:760px;margin:0 auto;padding:18px 18px 30px;text-align:center}
+.v-top{display:flex;justify-content:space-between;font-size:10px;color:#555;letter-spacing:.3em;margin-bottom:10px}
+.v-room{width:100%;height:auto;display:block;border:1px solid #1a1a1a}
+.vl{font-size:8px;fill:#777;text-anchor:middle;letter-spacing:1px;font-family:var(--serif)}
+.vh{cursor:pointer;outline:none}
+.vh:hover .vl,.vh:focus .vl{fill:#fff}
+.vh:hover path,.vh:focus path{stroke:#fff}
+.vdoor.locked{cursor:not-allowed}
+.vdoor.open{cursor:pointer}
+.vdoor.open:hover rect.df,.vdoor.open:focus rect.df{stroke:#fff;stroke-width:1.6}
+.v-rest{min-height:2em;color:#9a9a9a;font-family:var(--serif);font-size:14px;line-height:2;margin:18px auto 6px;max-width:520px;letter-spacing:.05em}
+.v-rest .who{color:#666;font-size:11px;letter-spacing:.2em;margin-right:6px}
+.v-head h1{font-family:var(--serif);font-weight:400;font-size:34px;letter-spacing:.6em;color:#fff;margin:18px 0 4px;padding-left:.6em}
+.v-sub{color:#888;font-size:13px;letter-spacing:.3em}
+.v-epi{color:var(--red);font-family:var(--serif);font-size:13px;letter-spacing:.2em;margin:14px 0 20px}
+.v-btns .t-btn{width:min(300px,100%)}
+.t-foot{color:#444!important;font-size:10.5px;margin-top:16px;line-height:1.8}
+@media (max-width:520px){#story{padding:34px 20px 50px!important}.line p{font-size:16px}.chap-card h2{font-size:24px}.v-head h1{font-size:28px;letter-spacing:.4em}.vl{font-size:10px}#controls{padding:12px 18px calc(16px + env(safe-area-inset-bottom))!important}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rain{display:none}}
+.bilu.key .bl,.bilu.key h4{color:var(--red)!important}.bilu.key{border-color:#3a0a0d!important}.bilu .sig,.bilu .sig b{color:#777!important}
+header{position:fixed!important;top:0;left:0;right:0;max-width:680px;margin:0 auto;z-index:30}
+#story{padding-top:86px!important}
+.line.talk p,.line p{border-bottom:none!important}
+.line.talk{border:none!important}
+@media (prefers-reduced-motion: reduce){.line.sense p,.line p,.line{opacity:1!important;transform:none!important}}
+header{z-index:30!important}
+header{background:#000!important;border-bottom:1px solid #141414!important}.survey,.board,.interro,.quiz,.read,.line{scroll-margin-top:96px}
+
 </style>
 </head>
 <body>
@@ -403,7 +510,7 @@ header::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;back
     <div id="achBody"></div>
     <div class="dsec">其他</div>
     <button class="t-btn ghost" id="mSound">环境声：关</button>
-    <button class="t-btn ghost" id="mTitle">回到走廊（标题）</button>
+    <button class="t-btn ghost" id="mTitle">回到别墅</button>
     <button class="t-btn ghost" id="mReset">清除全部存档</button>
     <div class="board-meta" style="margin-top:16px;line-height:1.85">
       <b>门内须知</b><br>· 点「继续」或按 空格 / 回车 往下读；数字键 1–9 选选项。每进入新的一节都会自动存档。<br>· 你是<b>林秋石</b>，第一次进门的新人。标着「视角 · 阮白洁」的段落，你借她的眼睛看人：点出对方身上藏着的那一处破绽，这叫「读人」。<br>· 页眉的「门内时间」会随行动推进。<b>天黑以后，规矩会变</b>；拖得太久，钥匙也救不了你。<br>· 三楼和古庙要亲手点开场景图去查；线索栏可以「组合推理」，两条线索合起来，推出这扇门的规则。<br>· 「规则推演」要把造棺材的每一步连上对应的人和证据，最后说出那东西是什么、为什么是你们。<br>· 和木匠的对峙：每一轮选一件线索、一种问法，三道口风要一道一道撬开。<br>· 阮白洁肯和你说多少，看你怎么待她。<br>· 一共六种结局，结局后有一页「门外」。通关一次后，标题处开放「重读模式」，会标出你漏掉的伏笔。<br>· 环境声全部由浏览器实时合成，默认关闭。
@@ -412,34 +519,52 @@ header::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;back
 </aside>
 <div id="toasts"></div>
 
-<section class="screen" id="titleScreen" style="overflow-y:auto;align-items:flex-start;padding:20px 0">
+<section class="screen" id="titleScreen">
   <div class="rain" id="rain"></div>
-  <div class="tbox">
-    <svg class="corridor" viewBox="0 0 380 150" aria-hidden="true">
-      <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1f26"/><stop offset="1" stop-color="#07080a"/></linearGradient>
-      <radialGradient id="lg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#eef3f6" stop-opacity=".95"/><stop offset="1" stop-color="#8fb3c9" stop-opacity="0"/></radialGradient></defs>
-      <rect width="380" height="150" fill="url(#cg)"/>
-      <path d="M0 150 L150 82 L230 82 L380 150Z" fill="#0d1014"/>
-      <path d="M0 0 L150 56 L230 56 L380 0Z" fill="#0b0d10"/>
-      <g id="doorsL"></g><g id="doorsR"></g>
-      <rect x="168" y="58" width="44" height="24" fill="#050607" stroke="#2a3038"/>
-      <text x="190" y="74" font-size="7" fill="#3a424c" text-anchor="middle" font-family="monospace">12</text>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><g id="doorsL"></g><g id="doorsR"></g></svg>
+  <div class="villa">
+    <div class="v-top"><span>黑曜石别墅 · 客厅</span><span id="vClock">门外 · 夜</span></div>
+    <svg class="v-room" viewBox="0 0 400 270" role="img" aria-label="黑曜石别墅客厅：一面墙的门、沙发、柜子、书桌、书架、唱机">
+      <defs><radialGradient id="vlamp" cx=".5" cy=".3" r=".7"><stop offset="0" stop-color="#2a2a2a"/><stop offset="1" stop-color="#050505" stop-opacity="0"/></radialGradient></defs>
+      <rect width="400" height="270" fill="#050505"/>
+      <rect x="60" y="0" width="280" height="180" fill="url(#vlamp)"/>
+      <line x1="0" y1="190" x2="400" y2="190" stroke="#2c2c2c"/>
+      <line x1="0" y1="190" x2="-40" y2="270" stroke="#1c1c1c"/><line x1="400" y1="190" x2="440" y2="270" stroke="#1c1c1c"/>
+      <g id="vDoors"></g>
+      <g class="vh" data-act="chars" tabindex="0" role="button" aria-label="同伴">
+        <path d="M120 232 v-22 q0-8 8-8 h144 q8 0 8 8 v22 M112 216 h16 v26 h-16z M272 216 h16 v26 h-16z M128 232 h144 v10 h-144z" fill="#0a0a0a" stroke="#bdbdbd" stroke-width="1"/>
+        <text x="200" y="258" class="vl">同伴</text></g>
+      <g class="vh" data-act="cabinet" tabindex="0" role="button" aria-label="钥匙与线索柜">
+        <path d="M18 196 h52 v62 h-52z M18 216 h52 M18 236 h52 M44 196 v62" fill="#0a0a0a" stroke="#bdbdbd"/>
+        <circle cx="40" cy="206" r="1.5" fill="#bdbdbd"/><circle cx="48" cy="206" r="1.5" fill="#bdbdbd"/>
+        <text x="44" y="267" class="vl">钥匙柜</text></g>
+      <g class="vh" data-act="save" tabindex="0" role="button" aria-label="存档">
+        <path d="M318 214 h66 M324 214 v40 M378 214 v40 M336 208 h22 l2 6 h-26z" fill="none" stroke="#bdbdbd"/>
+        <text x="351" y="205" class="vl">书桌 · 存档</text></g>
+      <g class="vh" data-act="reread" tabindex="0" role="button" aria-label="重读">
+        <path d="M8 120 h44 v66 h-44z M8 142 h44 M8 164 h44 M14 122 v18 M20 124 v16 M28 122 v18 M16 146 v16 M24 144 v18 M34 146 v16 M14 168 v16 M40 166 v18" fill="none" stroke="#8a8a8a"/>
+        <text x="30" y="114" class="vl">书架 · 重读</text></g>
+      <g class="vh" data-act="sound" tabindex="0" role="button" aria-label="环境声">
+        <path d="M352 180 h36 v10 h-36z M362 176 q8-30 30-34 M362 176 l-6 -6 q14 -22 36 -28" fill="none" stroke="#8a8a8a"/>
+        <text x="370" y="132" class="vl" id="vSnd">唱机 · 关</text></g>
     </svg>
-    <div class="t-kicker">DOOR 01 / 12 · 同人文字冒险</div>
-    <div class="t-main">致命<span>游</span>戏</div>
-    <div class="t-case">第一扇门 ·《独自莫凭栏》</div>
-    <div class="t-sub">SNOW VILLAGE</div>
-    <p class="t-epi">一人不入庙，二人不观井，<br>三人不抱树，独自莫凭栏。</p>
-    <div class="t-line"></div>
-    <p class="t-desc">起先，是家里的猫不让抱了。<br>然后某天傍晚，林秋石推开自己家的门，门外不是楼道，是一条长长的走廊，两边各六扇一模一样的铁门。<br>门里是一座被大雪封住的山村。村长请他们帮忙，造一口棺材。</p>
-    <button class="t-btn" id="tStart">推开第一扇门</button>
-    <button class="t-btn ghost" id="tContinue" style="display:none">继续（自动存档）</button>
-    <button class="t-btn ghost" id="tLoad" style="display:none">读取手动存档</button>
-    <button class="t-btn ghost" id="tReread" style="display:none">重读模式 · 标出伏笔</button>
-    <button class="t-btn ghost" id="tAch">结局与成就</button>
+    <p class="v-rest" id="vRest"></p>
+    <div class="v-head">
+      <h1>致命游戏</h1>
+      <div class="v-sub">第一扇门 ·《独自莫凭栏》</div>
+      <p class="v-epi">一人不入庙，二人不观井，三人不抱树，独自莫凭栏。</p>
+    </div>
+    <div class="v-btns">
+      <button class="t-btn" id="tStart">推开第一扇门 · 雪村</button>
+      <button class="t-btn ghost" id="tContinue" style="display:none">继续（自动存档）</button>
+      <button class="t-btn ghost" id="tLoad" style="display:none">读取手动存档</button>
+      <button class="t-btn ghost" id="tReread" style="display:none">重读模式 · 标出伏笔</button>
+      <button class="t-btn ghost" id="tAch">钥匙柜 · 结局与成就</button>
+    </div>
     <p class="t-foot">非商业同人改编 · 剧情依据西子绪《死亡万花筒》（网剧名《致命游戏》）第一扇门<br>所有叙述与对白均为重新撰写，未摘录原著文字</p>
   </div>
 </section>
+
 <section class="screen hide" id="endScreen" style="overflow-y:auto;align-items:flex-start;padding:30px 0">
   <div class="tbox" id="endBox"></div>
 </section>
@@ -1485,6 +1610,7 @@ function fsNote(fs){
   n.appendChild(document.createTextNode(fs[0]));
   return n;
 }
+const KEY_RE=/入庙|观井|抱树|凭栏|犯规|违反|死了|尸体/;
 function addLine(who, text, fs){
   const d = document.createElement('div');
   if(who==='~'){
@@ -1502,9 +1628,10 @@ function addLine(who, text, fs){
     const w = el('span', 'who ' + (SPEAKER_CLASS[who]||'c-oth'), who);
     d.appendChild(w); d.appendChild(p); if(note) p.appendChild(note);
   }
+  if(KEY_RE.test(Array.isArray(text)?text.join(''):String(text))) d.classList.add('key');
   story.appendChild(d); scrollDown();
 }
-function sysLine(text){ const d=el('div','line sys'); d.appendChild(el('span',null,text)); story.appendChild(d); }
+function sysLine(text){ const d=el('div','line sys'+(KEY_RE.test(String(text))?' key':'')); d.appendChild(el('span',null,text)); story.appendChild(d); }
 function addPov(pov){
   S.pov = pov;
   story.classList.toggle('pov-ruan', pov==='ruan');
@@ -1544,6 +1671,7 @@ function addBilu(o){
   sg.appendChild(el('span',null,clockStr(S.time)));
   d.appendChild(sg);
   if(o.note) d.appendChild(el('span','mnote',o.note));
+  d.classList.add('key');
   story.appendChild(d); scrollDown();
 }
 function render(L){
@@ -1562,8 +1690,14 @@ function showContinue(cb, label){
   controls.innerHTML='';
   const b=el('button','btn-next'); b.innerHTML=(label||'继续')+'<span class="k">空格 / 回车</span>';
   b.onclick=()=>{ const f=contCb; contCb=null; f&&f(); };
-  controls.appendChild(b);
+  if(contCb===step && visibleAhead()){
+    const row=el('div','ctl-row'); row.appendChild(b);
+    const sk=el('button','btn-skip','全部显示'); sk.title='一次显示本段剩余文字';
+    sk.onclick=()=>{ contCb=null; skipping=true; step(); };
+    row.appendChild(sk); controls.appendChild(row);
+  } else controls.appendChild(b);
 }
+let skipping=false;
 function visibleAhead(){ return queue.some(x=>isVis(x) && cond(x[2])); }
 function step(){
   controls.innerHTML='';
@@ -1577,8 +1711,10 @@ function step(){
       while(queue.length){ const x=queue.shift(); if(cond(x[2]) && !isVis(x)) doFx(x); }
       break;
     }
+    if(skipping) continue;
     showContinue(); return;
   }
+  skipping=false;
   const f = afterQueue; afterQueue = null; f && f();
 }
 function playThen(lines, cb){ queue=(lines||[]).slice(); afterQueue=cb; step(); }
@@ -1655,6 +1791,7 @@ function renderChoices(n){
   controls.appendChild(el('div','choice-prompt', S.pov==='ruan' ? '> 阮白洁的选择' : '> 你的选择'));
   n.choices.filter(o=>cond(o.if)).forEach((o,i)=>{
     const b=el('button','choice',o.t); b.dataset.n=String.fromCharCode(65+i);
+    if(o.to || /railing|killed|wellDoor/.test((o.fx&&o.fx.flag)||'')) b.classList.add('crit');
     if(o.lock && cond(o.lock[0])){
       b.classList.add('locked'); b.disabled=true; b.appendChild(el('small',null,'（'+o.lock[1]+'）'));
     } else b.onclick=()=>{
@@ -1679,7 +1816,7 @@ function renderHub(n){
   controls.innerHTML='';
   controls.appendChild(el('div','choice-prompt','> ' + h.prompt + '（还能做 ' + (limit-used) + ' 件）'));
   avail.filter(o=>!o.end || o.always || used>0).forEach((o,i)=>{
-    const b=el('button','choice',o.t); b.dataset.n=String.fromCharCode(65+i);
+    const b=el('button','choice',o.t); b.dataset.n=String.fromCharCode(65+i); if(o.end||/railing|killed|wellDoor/.test((o.fx&&o.fx.flag)||'')) b.classList.add('crit');
     b.onclick=()=>{ S.choices++; S.hubUsed.push(key(o.id)); addLine('>', o.t); applyFx(o.fx); playThen(o.say, ()=>renderHub(n)); };
     controls.appendChild(b);
   });
@@ -2224,7 +2361,7 @@ function updateBadges(){
   bh.textContent=S.freshChars.length; bh.style.display=S.freshChars.length?'block':'none';
 }
 function pulse(sel){ const e=$(sel); e.classList.remove('pulse'); void e.offsetWidth; e.classList.add('pulse'); }
-function toast(msg){ const box=$('#toasts'); while(box.children.length>=3) box.firstChild.remove(); const t=el('div','toast',msg); box.appendChild(t); setTimeout(()=>t.remove(), 2900); }
+function toast(msg){ if(!$('#titleScreen').classList.contains('hide') && typeof villaToast==='function'){ villaToast(msg); } const box=$('#toasts'); while(box.children.length>=1) box.firstChild.remove(); const t=el('div','toast',msg); box.appendChild(t); setTimeout(()=>t.remove(), 2900); }
 
 /* ---- 元数据：结局 / 成就 / 重读 ---- */
 function loadMeta(){
@@ -2268,12 +2405,12 @@ function showEnding(){
   const b1=add('button','t-btn','门外'); b1.id='eSeal';
   const b2=add('button','t-btn ghost','翻看线索栏'); b2.id='eBoard';
   const b3=add('button','t-btn ghost','重新进门'); b3.id='eRestart';
-  const b4=add('button','t-btn ghost','回到走廊'); b4.id='eTitle';
+  const b4=add('button','t-btn ghost','回到别墅'); b4.id='eTitle';
   $('#endScreen').classList.remove('hide'); $('#endScreen').scrollTop=0;
   b1.onclick=()=>{ $('#endScreen').classList.add('hide'); showSeal(); };
   b2.onclick=()=>{ $('#endScreen').classList.add('hide'); openDrawer('clues'); };
   b3.onclick=()=>{ $('#endScreen').classList.add('hide'); startNew(false); };
-  b4.onclick=()=>{ $('#endScreen').classList.add('hide'); showTitle(); };
+  b4.onclick=()=>{ $('#endScreen').classList.add('hide'); showTitle(S.ending); };
 }
 function showSeal(){
   const e=S.ending||'e2', box=$('#sealBox'); box.innerHTML='';
@@ -2288,7 +2425,7 @@ function showSeal(){
     ph.appendChild(b); box.appendChild(ph);
   }
   const last=el('p','sp last','DOOR 02 · 菲尔夏鸟'); last.style.animationDelay=delay+'s'; box.appendChild(last);
-  const btn=el('button','t-btn ghost','回到走廊'); btn.style.marginTop='18px'; btn.onclick=()=>{ $('#sealScreen').classList.add('hide'); showTitle(); };
+  const btn=el('button','t-btn ghost','回到别墅'); btn.style.marginTop='18px'; btn.onclick=()=>{ $('#sealScreen').classList.add('hide'); showTitle(S.ending); };
   box.appendChild(btn);
   $('#sealScreen').classList.remove('hide'); $('#sealScreen').scrollTop=0;
   Amb.scene('wind');
@@ -2355,7 +2492,7 @@ const Amb = (()=>{
     }
   };
 })();
-function syncSoundUI(){ const b=$('#btnSound'); b.textContent=Amb.on?'声·开':'声·关'; b.classList.toggle('on',Amb.on); $('#mSound').textContent='环境声：'+(Amb.on?'开':'关'); }
+function syncSoundUI(){ const vs=document.querySelector('#vSnd'); if(vs) vs.textContent='唱机 · '+(Amb.on?'开':'关'); const b=$('#btnSound'); b.textContent=Amb.on?'声·开':'声·关'; b.classList.toggle('on',Amb.on); $('#mSound').textContent='环境声：'+(Amb.on?'开':'关'); }
 function toggleSound(){ Amb.toggle(); syncSoundUI(); toast(Amb.on?'环境声已开启（浏览器实时合成）':'环境声已关闭'); }
 
 /* ---- 存档 ---- */
@@ -2383,8 +2520,57 @@ function updateSaveInfo(){
 }
 
 /* ---- 封面 ---- */
-function showTitle(){
-  closeDrawer();
+const REST={
+  mid:[['阮白洁','门还开着。去喝口水，别把自己当成还在雪里。'],['林秋石','（客厅的灯是暖的，手却还没缓过来。）']],
+  fresh:[['','客厅很安静。墙上一排门，只有第一扇的门缝底下透着白光。'],['','沙发上有人留了一条毯子，像是知道今晚会有人回来。']],
+  e1:[['阮南烛','回来了。热水在壶里，先洗个澡。'],['林秋石','……你到底是谁？'],['阮南烛','一个会陪你走到第十二扇门的人。今晚先睡。']],
+  e2:[['林秋石','（门在身后合上。客厅里没有人等他。）'],['','钥匙柜里多了一把冷的钥匙。他站了很久，才想起要开灯。']],
+  e3:[['','第一扇门的门缝暗了下去。'],['','客厅里的灯，一盏一盏，自己熄了。']],
+  e4:[['','栏杆外面是雪。'],['','别墅里，第一扇门安静地关着，像从来没人推开过。']],
+  e5:[['林秋石','（他出来了。手还记得那时候的重量。）'],['阮白洁','规矩只认对的东西。下一次，先把规矩读完。']],
+  e6:[['','天黑以后，门没有再开。'],['','沙发上的毯子，一直叠得很整齐。']]
+};
+function villaRest(k){
+  const box=$('#vRest'); if(!box) return; box.innerHTML='';
+  (REST[k]||REST.fresh).forEach((x,i)=>{ const p=el('span'); p.style.display='block'; if(x[0]) p.appendChild(el('span','who',x[0])); p.appendChild(document.createTextNode(x[1])); if(k==='e3'||k==='e6'){} box.appendChild(p); });
+}
+function buildVilla(){
+  const g=$('#vDoors'); if(!g || g.childNodes.length) return;
+  for(let i=0;i<12;i++){
+    const r=Math.floor(i/6), c=i%6, x=74+c*44, y=26+r*80, w=32, hh=66, open=i===0;
+    const d=svgEl('g',{class:'vdoor '+(open?'open':'locked'),tabindex:open?0:-1,role:open?'button':'img','aria-label':open?'第一扇门 · 雪村':'第'+(i+1)+'扇门 · 待开启'},g);
+    svgEl('rect',{class:'df',x,y,width:w,height:hh,fill:'#070707',stroke:open?'#e8e8e8':'#2a2a2a','stroke-dasharray':open?'':'2 2'},d);
+    svgEl('circle',{cx:x+w-6,cy:y+hh/2,r:1.4,fill:open?'#e8e8e8':'#2a2a2a'},d);
+    if(open){ svgEl('rect',{x,y:y+hh-2,width:w,height:2,fill:'#fff',opacity:.8},d); }
+    const t=svgEl('text',{x:x+w/2,y:y+hh/2+3,'text-anchor':'middle','font-size':open?9:6,fill:open?'#fff':'#3a3a3a','font-family':'var(--serif)'},d);
+    t.textContent=open?'雪村':'待开启';
+    const n=svgEl('text',{x:x+w/2,y:y-4,'text-anchor':'middle','font-size':6,fill:open?'#999':'#333','font-family':'monospace'},d); n.textContent=String(i+1).padStart(2,'0');
+    if(open){ const go=()=>{ if(readSave(SAVE_AUTO)) loadFrom(SAVE_AUTO); else startNew(false); }; d.addEventListener('click',go); d.addEventListener('keydown',ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); go(); } }); }
+    else d.addEventListener('click',()=>{ villaToast('这扇门还没有开。'); });
+  }
+  document.querySelectorAll('.vh').forEach(h=>{
+    const act=()=>villaAct(h.dataset.act);
+    h.addEventListener('click',act); h.addEventListener('keydown',ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); act(); } });
+  });
+}
+function villaToast(m){ const v=$('#vClock'); v.textContent=m; clearTimeout(villaToast.t); villaToast.t=setTimeout(()=>v.textContent='门外 · 夜',2600); }
+function villaPeek(){
+  if(S && S.node) return;
+  const r=readSave(SAVE_AUTO)||readSave(SAVE_MANUAL);
+  if(r){ S=r.s; return; }
+  if(META.done){ S=newState(false); S.chars=Object.keys(CHARS); }
+}
+function villaAct(a){
+  if(a==='chars'){ villaPeek(); renderChars(); openDrawer('chars'); }
+  else if(a==='cabinet') showAchScreen();
+  else if(a==='save'){ updateSaveInfo(); renderAch($('#achBody')); openDrawer('menu'); }
+  else if(a==='reread'){ if(!META.done){ villaToast('书架上的书还没写完——先走完一次第一扇门。'); return; } $('#tReread').click(); }
+  else if(a==='sound'){ toggleSound(); }
+}
+function showTitle(rest){
+  closeDrawer(); buildVilla();
+  villaRest(typeof rest==='string' ? rest : (S && S.node && !S.ending && readSave(SAVE_AUTO) ? 'mid' : 'fresh'));
+  const vs=$('#vSnd'); if(vs) vs.textContent='唱机 · '+(Amb.on?'开':'关');
   ['#endScreen','#sealScreen'].forEach(s=>$(s).classList.add('hide'));
   $('#titleScreen').classList.remove('hide');
   $('#tContinue').style.display = readSave(SAVE_AUTO) ? 'block':'none';
@@ -2397,7 +2583,9 @@ function showAchScreen(){
   const box=$('#endBox'); box.innerHTML='';
   box.appendChild(el('div','t-kicker','结局与成就'));
   const c=el('div'); c.style.textAlign='left'; c.style.position='relative'; box.appendChild(c); renderAch(c);
-  const b=el('button','t-btn ghost','返回封面'); b.style.marginTop='12px'; b.onclick=()=>{ $('#endScreen').classList.add('hide'); showTitle(); }; box.appendChild(b);
+  const b=el('button','t-btn ghost','回到客厅'); b.style.marginTop='12px'; b.onclick=()=>{ $('#endScreen').classList.add('hide'); showTitle(); }; box.appendChild(b);
+  const keys=((META.last&&META.last.keys)||[]).filter(k=>CLUES[k]);
+  if(keys.length){ const sec=el('div','board-meta','柜子里收着上一次带出来的线索：'+keys.map(k=>itemName(k)).join('、')); sec.style.textAlign='left'; sec.style.margin='12px 0'; box.insertBefore(sec,b); }
   hideTitle(); $('#endScreen').classList.remove('hide');
 }
 function armConfirm(btn, msg, action){
@@ -2448,6 +2636,8 @@ story.addEventListener('click',e=>{
   const b=controls.querySelector('.btn-next'); if(b && contCb && !b.disabled) b.click();
 });
 
+
+(function(){ const t=$('#toasts'), hd=document.querySelector('header'); if(t&&hd) hd.appendChild(t); })();
 
 S=newState(false); updateBadges(); renderProgress(0); renderClock(); syncSoundUI(); showTitle();
 </script>
