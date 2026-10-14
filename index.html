@@ -357,6 +357,35 @@ header::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;back
   .chap-card .mnote{position:static;display:block;max-width:none;text-align:right;margin-top:6px}
 }
 @media (prefers-reduced-motion:reduce){.flake,.corridor .d1glow{animation:none}}
+
+/* ---------- v4：规则 / 名单 / 夜间限时 ---------- */
+.card h4 .tag.lv0{color:var(--faint);border-color:var(--edge2)}
+.card h4 .tag.lv1{color:var(--amber);border-color:#6b5a3a}
+.card h4 .tag.lv2{color:var(--green);border-color:#3e5a4c}
+.rule-card.lv0{border-style:dashed}
+.rule-card.lv2{border-color:#3e5a4c}
+.rules-inline{border:1px solid var(--edge2);background:linear-gradient(180deg,#15181d,#101317);padding:12px 14px 2px;margin:4px 0 22px;animation:fade .5s}
+.rules-inline .ri-h{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;color:var(--rust);margin-bottom:10px}
+.rules-inline .card{margin-bottom:10px}
+.line.sys.dead span{color:#ff9a90;border-color:var(--rust);background:var(--rust-soft)}
+.line.sys.rule span{color:var(--amber);border-color:#6b5a3a;background:var(--amber-soft)}
+.choice small.rule-ok{color:var(--green);margin-left:6px;font-size:11px}
+.roster{border:1px solid var(--edge2);background:linear-gradient(180deg,#171b20,#121519);padding:4px 12px;margin-bottom:12px}
+.roster .r{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px dashed var(--rule);font-family:var(--serif);font-size:13.5px;color:var(--text)}
+.roster .r:last-child{border-bottom:none}
+.roster .r small{display:block;color:var(--faint);font-size:11px;font-family:var(--sans);line-height:1.5}
+.roster .r.dead .nm{color:var(--faint);text-decoration:line-through;text-decoration-color:rgba(176,53,46,.6)}
+.roster .s{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;border:1px solid var(--edge2);padding:0 6px;white-space:nowrap;border-radius:2px}
+.roster .s.dead{color:var(--rust);border-color:var(--rust)}
+.roster .s.out{color:var(--green);border-color:#3e5a4c}
+.roster .s.in{color:var(--ice);border-color:#3e5260}
+.ntimer{border:1px solid var(--rust);background:rgba(176,53,46,.1);padding:7px 12px 8px;margin:0 0 9px;font-family:var(--mono);font-size:12px;color:#f1c9c4;letter-spacing:.08em;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:2px 10px;position:relative}
+.ntimer .nt-s{font-weight:700;color:var(--snow);font-size:14px}
+.ntimer i{display:block;flex-basis:100%;height:3px;background:#2a1513;margin-top:3px}
+.ntimer i b{display:block;height:100%;width:100%;background:var(--rust);box-shadow:0 0 8px rgba(176,53,46,.6);transition:width .1s linear}
+.ntimer .nt-d{flex-basis:100%;font-size:10.5px;color:var(--faint);letter-spacing:.04em}
+.ntimer.low{animation:pulse 1s ease infinite}
+.sp.out-list{color:var(--soft)}
 </style>
 </head>
 <body>
@@ -403,10 +432,11 @@ header::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;back
     <div id="achBody"></div>
     <div class="dsec">其他</div>
     <button class="t-btn ghost" id="mSound">环境声：关</button>
+    <button class="t-btn ghost" id="mTimer" title="夜里的限时选择：标准 / 延长 / 关闭。切到别的标签页或打开抽屉时，倒计时会暂停。">夜间限时：标准</button>
     <button class="t-btn ghost" id="mTitle">回到走廊（标题）</button>
     <button class="t-btn ghost" id="mReset">清除全部存档</button>
     <div class="board-meta" style="margin-top:16px;line-height:1.85">
-      <b>门内须知</b><br>· 点「继续」或按 空格 / 回车 往下读；数字键 1–9 选选项。每进入新的一节都会自动存档。<br>· 你是<b>林秋石</b>，第一次进门的新人。标着「视角 · 阮白洁」的段落，你借她的眼睛看人：点出对方身上藏着的那一处破绽，这叫「读人」。<br>· 页眉的「门内时间」会随行动推进。<b>天黑以后，规矩会变</b>；拖得太久，钥匙也救不了你。<br>· 三楼和古庙要亲手点开场景图去查；线索栏可以「组合推理」，两条线索合起来，推出这扇门的规则。<br>· 「规则推演」要把造棺材的每一步连上对应的人和证据，最后说出那东西是什么、为什么是你们。<br>· 和木匠的对峙：每一轮选一件线索、一种问法，三道口风要一道一道撬开。<br>· 阮白洁肯和你说多少，看你怎么待她。<br>· 一共六种结局，结局后有一页「门外」。通关一次后，标题处开放「重读模式」，会标出你漏掉的伏笔。<br>· 环境声全部由浏览器实时合成，默认关闭。
+      <b>门内须知</b><br>· 点「继续」或按 空格 / 回车 往下读；数字键 1–9 选选项。每进入新的一节都会自动存档。<br>· 你是<b>林秋石</b>，第一次进门的新人。标着「视角 · 阮白洁」的段落，你借她的眼睛看人：点出对方身上藏着的那一处破绽，这叫「读人」。<br>· 页眉的「门内时间」会随行动推进。<b>天黑以后，规矩会变</b>；拖得太久，钥匙也救不了你。<br>· 三楼和古庙要亲手点开场景图去查；线索栏可以「组合推理」，两条线索合起来，推出这扇门的规则。<br>· 四句提示一开始只是四句话。看见的、听见的、差点踩中的，会让你一句一句读懂它；线索栏顶部能看到每一句懂到了几分。<b>照错的理解去做，会出人命。</b><br>· 夜里有些选择是限时的，时间到了，就当你什么都没做。菜单里可以把限时延长或关闭；切到别的标签页、打开抽屉时，倒计时暂停。<br>· 名册顶部是门内十三个人的名单：谁还活着，谁没能出门。<br>· 「规则推演」要把造棺材的每一步连上对应的人和证据，最后说出那东西是什么、为什么是你们。<br>· 和木匠的对峙：每一轮选一件线索、一种问法，三道口风要一道一道撬开。<br>· 阮白洁肯和你说多少，看你怎么待她。<br>· 一共六种结局，结局后有一页「门外」。通关一次后，标题处开放「重读模式」，会标出你漏掉的伏笔。<br>· 环境声全部由浏览器实时合成，默认关闭。
     </div>
   </div>
 </aside>
@@ -1300,7 +1330,7 @@ function decideEndingKey(f){
   if(f.wrongman || f.killed) return 'e5';
   if(!f.interWon) return 'e3';
   if(f.late) return 'e6';
-  if(S.trust>=4 && f.boardMotive) return 'e1';
+  if(S.trust>=4 && f.boardMotive && !f.dead_xiong && !f.dead_ke) return 'e1';
   return 'e2';
 }
 const END_STAMP = {e1:'DOOR 01 · CLEARED', e2:'DOOR 01 · CLEARED', e3:'LAST ONE STANDING', e4:'TERMINATED', e5:'RETRIBUTION', e6:'NIGHTFALL'};
@@ -1359,6 +1389,192 @@ const SEAL = {
 };
 const SEAL_PHONE = {cond:'e1&trust>=5', owner:'lin', head:'林秋石的手机', time:'凌晨', msgs:[['ruan','耳钉别摘。'],['lin','……你是谁？'],['ruan','你说呢，林哥。'],['ruan','下一扇门，我陪你。']]};
 /* =========================================================
+   v4：规则发现 · 同伴生死 · 夜间限时
+   ========================================================= */
+const RULES = {
+  tree:  {t:'三人不抱树', lv:['只是一句话。树？哪棵树？','和木匠说的「砍树」有关——可「三人」指的是什么？','抱树别凑够三个人：两人扶、一人砍，砍的人不碰树。']},
+  temple:{t:'一人不入庙', lv:['只是一句话。村里有庙吗？','和「拜一拜」的那座古庙有关——是别一个人去，还是别去？','进庙要大家一起进，谁也别落单，更不能派一个人代拜。']},
+  well:  {t:'二人不观井', lv:['只是一句话。井在哪儿？','井——村民一提就慌的那口井。「二人」是要两个人一起，还是……','看井不能刚好是两个人：要么所有人一起围过去。']},
+  rail:  {t:'独自莫凭栏', lv:['只是一句话。哪里的栏杆？','木楼走廊上的栏杆。昨夜有东西刮过它。','夜里谁也别一个人去栏杆边——它就在楼上看着。']}
+};
+const RULE_KEYS = ['temple','well','tree','rail'];
+const RULE_LV = ['未解','半懂','明白'];
+/* 门内十三人（九男四女）。无名者只写特征，不另起名字。 */
+const PEOPLE = {
+  lin:{n:'林秋石'}, ruan:{n:'阮白洁'}, xiong:{n:'熊漆'}, ke:{n:'小柯'}, cheng:{n:'程文'}, wang:{n:'王潇依'},
+  f3a:{n:'三楼的男人（其一）'}, f3b:{n:'三楼的男人（其二）'},
+  tA:{n:'不怎么说话的男人'}, tB:{n:'穿冲锋衣的男人'}, tC:{n:'戴眼镜的男人'}, tD:{n:'短发的女孩'}, tE:{n:'抽烟的中年男人'}
+};
+const ESCAPE_ENDS = ['e1','e2','e3','e5'];
+Object.assign(ACH, {
+  bare:  {name:'空手解题', desc:'四句提示，全凭推断读懂，没有一句是拿人命换来的。'},
+  still: {name:'定力', desc:'每一个限时的夜里，都在倒计时结束前做了决定。'},
+  nomore:{name:'没有多死一个人', desc:'除了这扇门本来就要带走的人，谁都没有多死。'}
+});
+
+/* ---- 规则：从「四句话」的答题，改成边看边懂 ---- */
+NODES.rulesTalk = {ch:5, title:'四句话', pov:'lin', amb:'wind', at:2280,
+ memo:'数字是禁忌，也是活法。',
+ lines:[
+  ['','回到木楼，熊漆把大家叫到一楼，把木匠的话说了一遍。'],
+  ['熊漆','先砍树，再拜庙，再填井。','interWon'],
+  ['熊漆','先砍树，再拜庙。后面的……他没说全。','!interWon'],
+  ['小柯','那四句话，现在该琢磨琢磨了。砍树、进庙、看井，好像全对得上。'],
+  ['','林秋石把那张纸条摊在桌上。四句话他都背得出来，可真正懂了几句，他自己心里有数。'],
+  ['@rules']
+ ],
+ hub:{limit:3, prompt:'天亮前还有一点时间。先和大家琢磨哪一句——', done:[['熊漆','行了。剩下的，到时候睁大眼睛看。']], opts:[
+  {id:'rtTree', t:'「三人不抱树」——砍树的时候，人该怎么站？', fx:{min:10, study:'tree'}, say:[
+    ['熊漆','门里给的数字，多半说的是人数。三个人一起碰那棵树，就算犯了。','r_tree2'],
+    ['林秋石','那就两个人扶，一个人砍，砍的人不碰树。','r_tree2'],
+    ['小柯','连要砍哪棵树都没人说过，现在琢磨这个有什么用。','!r_tree2']]},
+  {id:'rtTemple', t:'「一人不入庙」——那座庙，该怎么进？', fx:{min:10, study:'temple'}, say:[
+    ['阮白洁','一个人进庙会怎样，我可不想知道。林哥，到时候我们大家一起进，谁也别落下。','r_temple2'],
+    ['熊漆','庙？这村子有没有庙都还不知道。','!r_temple2']]},
+  {id:'rtWell', t:'「二人不观井」——井要怎么看？', fx:{min:10, study:'well'}, say:[
+    ['小柯','刚好两个人去看井，就是犯了。要么一起去，要么谁也别去。','r_well2'],
+    ['林秋石','井……村里应该有井，可它跟我们有什么关系？','!r_well2']]},
+  {id:'rtRail', t:'「独自莫凭栏」——昨晚门外那个声音？', fx:{min:10, study:'rail'}, say:[
+    ['阮白洁','昨晚指甲刮栏杆的声音，林哥也听见了吧。它就在楼上看着呢，谁一个人凑过去，谁就是下一个。','r_rail2'],
+    ['熊漆','栏杆？哪儿的栏杆？','!r_rail2']]},
+  {id:'rtGo', t:'不琢磨了，天亮就动身', end:true, always:true, fx:{min:0}, say:[['熊漆','也好。见到了再说。']]}
+ ]},
+ next:'treePrep'};
+
+NODES.treePrep = {ch:5, title:'扶树', pov:'lin', amb:'wind', at:2400, rule1:'tree',
+ memo:'三人不抱树。',
+ lines:[
+  ['','老树长在林子边上，树皮冻得发黑。斧子只有一把，握柄上结着一层薄冰。'],
+  ['@rules1','tree'],
+  ['熊漆','怎么分工？你说。']
+ ],
+ choices:[
+  {t:'「三个人一起抱住树干，稳当。」', rule:'tree', fx:{flag:'slipTree', min:40, score:-2}, say:[['','熊漆看了他一眼，没说话。三个人围了上去。']]},
+  {t:'「两个人扶，一个人砍。砍的人别碰树。」', rule:'tree', safe:true, fx:{min:5, score:1}, say:[['@ruleA','tree']]},
+  {t:'「谁都别碰树，拿绳子拴住了再砍。」', rule:'tree', fx:{min:50}, say:[
+    ['','绳子冻得发脆，拴了三回断了三回。等到终于有人上手去扶，天已经偏西了。'],
+    ['','最后还是两个人扶、一个人砍。熊漆嘀咕了一句：「看来这么站才对。」'],
+    ['@ruleW','tree']]}
+ ], next:'tree'};
+
+NODES.templePrep = {ch:6, title:'庙门口', pov:'lin', amb:'temple', at:2490, rule1:'temple',
+ memo:'一人不入庙。',
+ lines:[
+  ['','古庙半截埋在雪里。庙门半开着，里面黑洞洞的，十来个人挤在门口，谁也没先动。'],
+  ['@rules1','temple'],
+  ['小柯','谁进去拜？']
+ ],
+ choices:[
+  {t:'「派一个胆子大的进去，代大家拜。」', rule:'temple', fx:{flag:'slipTemple', min:30, score:-2}, say:[['','有人往前推了推，一个穿冲锋衣的男人骂了句脏话，自己先跨了进去。']]},
+  {t:'「一起进。一个都别落下。」', rule:'temple', safe:true, fx:{min:5, score:1}, say:[['@ruleA','temple']]},
+  {t:'「不进去了，在门外磕个头算了。」', rule:'temple', fx:{min:45}, say:[
+    ['','头磕完了，庙里什么动静都没有。'],
+    ['','远处的雪地里，木匠背着手站着，摇了摇头。那意思很明白：这不算拜。'],
+    ['','没办法，大家只好一起进去，一个挨一个，谁也没落单。'],
+    ['@ruleW','temple']]}
+ ], next:'temple'};
+
+NODES.wellPrep = {ch:8, title:'井口', pov:'lin', amb:'wind', at:3360, rule1:'well',
+ memo:'二人不观井。',
+ lines:[
+  ['','第三日一早。院子正中那口井，石板盖子被冻在了井沿上，几个人合力才撬开。井口往外冒着寒气。'],
+  ['@rules1','well'],
+  ['熊漆','得有人先看看里面。']
+ ],
+ choices:[
+  {t:'「两个人去看，互相照应。」', rule:'well', fx:{flag:'slipWell', min:30, score:-2}, say:[['','一个戴眼镜的男人和另一个人对视了一眼，一起走了过去。']]},
+  {t:'「我一个人趴着看，你们拽着我。」', rule:'well', fx:{min:20, flag:'wellNear'}, say:[
+    ['','林秋石趴在井沿上往下看。井里黑得发亮，像一只睁着的眼睛。'],
+    ['','他看得越久，越想往下凑一点，再凑一点——'],
+    ['','后面的人一把把他拽了回来。他这才发现，自己半个身子已经探进了井口。'],
+    ['阮白洁','（脸色难看）林哥，你刚才在笑。'],
+    ['@ruleW','well']]},
+  {t:'「大家一起围过去，谁也别落单。」', rule:'well', safe:true, fx:{min:5, score:1}, say:[['@ruleA','well']]}
+ ], next:'well'};
+NODES.well.lines[0] = ['','井口边上站满了人。'];
+NODES.board.next = S=>S.flags.wrongman?'wrongRite':'wellPrep';
+NODES.tree.next = 'templePrep';
+NODES.night1.rule1 = 'rail';
+
+/* ---- 死亡记录：原著里没能出门的人，在原著的时间点离开；玩家犯的错，会让人死得更早、或让本该活着的人死去 ---- */
+function insertAfter(node, match, lines){
+  const L=NODES[node].lines; const i=L.findIndex(x=>x[1]===match || (typeof x[1]==='string' && x[1].indexOf(match)===0));
+  if(i<0) throw new Error('insertAfter: '+node+' / '+match);
+  L.splice(i+1, 0, ...lines);
+}
+insertAfter('floor3','死人了。两个。',[['@die','f3a|第一夜 · 三楼东头的房间'],['@die','f3b|第一夜 · 三楼东头的房间']]);
+insertAfter('tree','三个人合力抱住树干',[['@die','tA|三个人一起抱住了树|tree','slipTree']]);
+insertAfter('temple','门口有人推了推',[['@die','tB|一个人进了庙|temple','slipTemple']]);
+insertAfter('well','有两个人先凑上去',[['@die','tC|刚好两个人看井|well','slipWell']]);
+NODES.board.lines.unshift(['','天快亮时清点人数：回二楼睡觉的人里，又有人没再下来。'],['@die','tA|第二夜 · 回房以后没再下来'],['@die','tB|第二夜 · 回房以后没再下来']);
+NODES.night2.choices[1].fx.flag='xiongHurt';
+NODES.night2.choices[2].say.push(['@die','cheng|第二夜 · 冲进了雪地']);
+NODES.well.choices[1].say.push(['@die','cheng|被推进了井里']);
+(function(){
+  const L=NODES.night3b.lines; const i=L.findIndex(x=>typeof x[1]==='string' && x[1].indexOf('林秋石数了数人头')===0);
+  L.splice(i,0,['','火把灭了一回。重新点起来的时候，人堆外圈空出了几个位置。'],['@die','tC|第三夜 · 墙外'],['@die','tD|第三夜 · 墙外'],['@die','tE|第三夜 · 墙外'],
+    ['','熊漆也不在了。他坐过的地方只剩一摊血，是从他手背那道口子里渗出来的。','xiongHurt'],['@die','xiong|第三夜 · 手背上那道口子一直在渗血','xiongHurt']);
+  L[i+6][1]='林秋石又数了一遍。还少一个。那个总缩在人堆后面、一句话都不说的姑娘，王潇依，不知道什么时候不见了。';
+  L.splice(i+7,0,['@die','wang|第三夜 · 墙外的咀嚼声']);
+})();
+NODES.redo.lines.splice(4,0,['@dieAll','从头再来的那几天']);
+NODES.railing.lines.push(['@die','lin|第一夜 · 独自凭栏|rail']);
+(function(){
+  const c=NODES.coffin.lines;
+  const i=c.findIndex(x=>typeof x[1]==='string' && x[1].indexOf('屋里一下子安静了')===0);
+  c[i]=['','屋里一下子安静了。熊漆看了看小柯，又看了看林秋石。','!dead_xiong'];
+  c[i+1]=['熊漆','你拿着。你最稳。','!dead_xiong'];
+  c.splice(i+2,0,['','屋里一下子安静了。小柯看着林秋石。','dead_xiong'],['小柯','你拿着。熊哥要是还在，也会这么说。','dead_xiong']);
+  const d=NODES.door.lines; d[1]=['熊漆','天黑前找不到，就熬不过今晚。拿钥匙的人，是她今晚第一个要找的。','!dead_xiong'];
+  d.splice(2,0,['小柯','天黑前找不到，就熬不过今晚。拿钥匙的人，是她今晚第一个要找的。','dead_xiong']);
+  const w=NODES.door.hub.opts.find(o=>o.id==='wellGo'); w.say=w.say.map(x=>x[1]&&x[1].indexOf('十几个人一起围到井边')===0?['','剩下的人一起围到井边。'+x[1].slice('十几个人一起围到井边。'.length)]:x);
+  const f=NODES.final.lines; const j=f.findIndex(x=>typeof x[1]==='string' && x[1].indexOf('他在镜子前站了很久')===0);
+  f[j]=['','他在镜子前站了很久。门里的十三个人，最后活着走到井底的，{outn}。','e1|e2'];
+  f.splice(j+1,0,['','熊漆和小柯是跟在他后面下的井。出了门以后，他再没见过他们。','e1&!dead_xiong&!dead_ke|e2&!dead_xiong&!dead_ke']);
+  f.push(['@dieLin','','e4|e6']);
+})();
+
+/* ---- 第四日：隔壁（原著：程文在门里杀了王潇依，死者回来找他） ---- */
+NODES.coffin.next = S=>S.flags.dead_cheng?'door':'cries';
+NODES.cries = {ch:9, title:'隔壁', pov:'lin', amb:'heart', dt:120,
+ memo:'在门里，别对人动手。',
+ lines:[
+  ['','午后，大家各自回了屋，等天黑前最后一次商量。'],
+  ['','隔壁忽然传来程文的惨叫。'],
+  ['程文','救命——来人啊——救救我——'],
+  ['','他在咚咚地捶墙。惨叫底下，还有一个女人在哭，呜呜咽咽的。那哭声林秋石听过很多次了。'],
+  ['','是王潇依。'],
+  ['阮白洁','（按住他的手腕）……林哥。']
+ ],
+ timed:{sec:12, def:1, label:'隔壁的门在响', out:'你没能动。阮白洁的手一直按在你手腕上。'},
+ choices:[
+  {t:'（冲出去，撞开隔壁的门）', fx:{min:20, score:-1, flag:'openCry'}, say:[
+    ['','林秋石拉开门的同时，对面的门也开了——小柯比他还快一步。'],
+    ['','她撞开了程文的房门。屋里的哭声停了。'],
+    ['','然后是很长、很长的一阵钝响，像有什么东西被一下一下地劈开。'],
+    ['@die','ke|撞开了程文的房门'],['@die','cheng|第四日 · 王潇依回来找他'],
+    ['阮白洁','（把他拽回屋里，背抵着门）……别看。']]},
+  {t:'（不动。听着）', still:true, fx:{min:10}, say:[
+    ['','惨叫越来越弱。取而代之的，是一种很钝的声音，一下，又一下，像利器劈在肉上，好像永远不会累。'],
+    ['','程文的声音停了。王潇依还在哭。'],
+    ['@die','cheng|第四日 · 王潇依回来找他'],
+    ['阮白洁','在门里杀了人，死的人是会回来的。'],
+    ['林秋石','……王潇依是他？'],
+    ['阮白洁','你说呢。'],
+    ['','出门的时候，林秋石看见隔壁的地板缝里，浸出了一滩血。']]},
+  {t:'「程文！」（隔着墙喊他）', fx:{min:10, trust:-1}, say:[
+    ['','程文的哭喊顿了一下，像是听见了。然后，更凄厉了。'],
+    ['','那一下一下的钝响，没有停。'],
+    ['@die','cheng|第四日 · 王潇依回来找他'],
+    ['阮白洁','（捂住他的嘴）你想让它也记住你的声音吗？']]}
+ ], next:'door'};
+
+/* ---- 夜间限时 ---- */
+NODES.night1.timed = {sec:12, def:2, label:'它停在门口了', out:'你没能动。被子底下，手脚都是僵的。'};
+NODES.night2.timed = {sec:10, def:2, label:'他已经冲到门口了', out:'你没能动。等你回过神，门已经开了。'};
+NODES.night3.timed = {sec:12, def:2, label:'那张脸停在他面前', out:'她没有动。她在等他自己扛过去。'};
+NODES.night1.choices[1].still = true; NODES.night1.choices[2].still = true;
+/* =========================================================
    引擎
    ========================================================= */
 const $ = s => document.querySelector(s);
@@ -1370,7 +1586,8 @@ let META = loadMeta();
 function newState(reread){
   return {v:1, node:'prologue', clues:[], freshClues:[], deds:[], freshDeds:[], chars:[], freshChars:[], score:0,
     quiz:{right:0,total:0}, flags:{}, choices:0, hubUsed:[], visited:[], time:900, spent:0, survey:[],
-    trust:0, reads:{ok:0,total:0}, combos:0, comboWrong:0, board:null, inter:null, pov:'lin', reread:!!reread, ending:null};
+    trust:0, reads:{ok:0,total:0}, combos:0, comboWrong:0, board:null, inter:null, pov:'lin', reread:!!reread, ending:null,
+    alive:Object.fromEntries(Object.keys(PEOPLE).map(k=>[k,true])), deaths:[], rules:{tree:0,temple:0,well:0,rail:0}, ruleWit:{}, timed:{n:0,timeout:0}};
 }
 /* 存档校验：补齐字段（独立存档键 zhiming_arc1_*） */
 function normalize(s){
@@ -1385,8 +1602,79 @@ function normalize(s){
   if(typeof s.time!=='number') s.time = NODES[s.node].at || 900;
   if(!s.reads) s.reads = {ok:0,total:0};
   if(!s.pov) s.pov = NODES[s.node].pov || 'lin';
+  migrateV4(s);
   s.reread = !!s.reread; s.v = 1;
   return s;
+}
+/* 旧存档（v1）没有生死与规则字段：按已走过的节点和旗标推算 */
+function migrateV4(s){
+  const v=s.visited, f=s.flags, c=s.clues;
+  if(!s.alive || typeof s.alive!=='object'){
+    s.alive={}; Object.keys(PEOPLE).forEach(k=>s.alive[k]=true); s.deaths=[];
+    const kd=(id,why)=>{ if(s.alive[id]){ s.alive[id]=false; f['dead_'+id]=true; s.deaths.push({id, t:s.time||0, why:why+'（由旧存档推算）'}); } };
+    if(v.includes('floor3')){ kd('f3a','第一夜 · 三楼东头的房间'); kd('f3b','第一夜 · 三楼东头的房间'); }
+    if(f.slipTree) kd('tA','三个人一起抱住了树'); if(f.slipTemple) kd('tB','一个人进了庙'); if(f.slipWell) kd('tC','刚好两个人看井');
+    if(v.includes('board')){ kd('tA','第二夜'); kd('tB','第二夜'); }
+    if(f.chengLost) kd('cheng','第二夜 · 冲进了雪地'); if(f.killed) kd('cheng','被推进了井里');
+    if(v.includes('night3b')) ['tC','tD','tE','wang'].forEach(x=>kd(x,'第三夜 · 墙外'));
+    if(v.includes('redo')) Object.keys(PEOPLE).forEach(x=>{ if(x!=='lin') kd(x,'从头再来的那几天'); });
+  }
+  if(!Array.isArray(s.deaths)) s.deaths=[];
+  Object.keys(PEOPLE).forEach(k=>{ if(typeof s.alive[k]!=='boolean') s.alive[k]=true; });
+  if(!s.rules || typeof s.rules!=='object'){
+    s.rules={tree:0,temple:0,well:0,rail:0}; s.ruleWit={};
+    const up=(k,l,h)=>{ if(s.rules[k]<l){ s.rules[k]=l; f['r_'+k+'1']=true; if(l===2){ f['r_'+k+'2']=true; s.ruleWit[k]=h; } } };
+    if(c.includes('ritual1')){ up('tree',1); up('temple',1); }
+    if(c.includes('ritual2')||c.includes('welltense')) up('well',1);
+    if(v.includes('night1')) up('rail',1);
+    if(c.includes('ceiling')||c.includes('longhair')) up('rail',2,'deduce');
+    if(v.includes('rulesTalk') && s.node!=='rulesTalk') RULE_KEYS.forEach(k=>up(k,2,'quiz'));  // 旧版在「四句话」答过题
+  }
+  if(!s.ruleWit || typeof s.ruleWit!=='object') s.ruleWit={};
+  if(!s.timed || typeof s.timed!=='object') s.timed={n:0,timeout:0};
+}
+/* ---- 生死 ---- */
+function kill(id, why){
+  if(!PEOPLE[id] || !S.alive[id]) return false;
+  S.alive[id]=false; S.flags['dead_'+id]=true; S.deaths.push({id, t:S.time, why:why||''});
+  return true;
+}
+function deathLine(id, why){
+  const d=el('div','line sys dead'); d.appendChild(el('span',null,'[ 死亡 ] '+PEOPLE[id].n+' · '+clockStr(S.time)+(why?' · '+why:'')));
+  story.appendChild(d); pulse('#btnChars'); scrollDown();
+}
+function aliveCount(){ return Object.keys(PEOPLE).filter(k=>S.alive[k]).length; }
+function personStatus(id){
+  const d=S.deaths.find(x=>x.id===id);
+  if(d) return ['dead','死亡', clockStr(d.t)+(d.why?' · '+d.why:'')];
+  if(S.ending && NODES[S.node] && NODES[S.node].ending){
+    if(ESCAPE_ENDS.includes(S.ending)){
+      if(id==='lin'||id==='ruan') return ['out','已出门', S.ending==='e5'&&id==='lin'?'门开了，可门外的事还没完':'从井底的铁门走了出去'];
+      return ['out','下井', '跟在后面下了井 · 出门后去向未明'];
+    }
+    return ['in','未出门','门还关着'];
+  }
+  return ['in','在门内',''];
+}
+function outNames(){ return Object.keys(PEOPLE).filter(k=>S.alive[k]).map(k=>PEOPLE[k].n); }
+/* ---- 规则理解 ---- */
+function ruleUp(k, lv, how){
+  if(!RULES[k] || S.rules[k]>=lv) return;
+  S.rules[k]=lv; S.flags['r_'+k+'1']=true; if(lv===2){ S.flags['r_'+k+'2']=true; S.ruleWit[k]=how||'deduce'; }
+  toast('规则 · 「'+RULES[k].t+'」→ '+RULE_LV[lv]);
+  const d=el('div','line sys rule'); d.appendChild(el('span',null,'[ 规则 ] 「'+RULES[k].t+'」'+RULE_LV[lv]+(how==='witness'?'（亲眼所见）':'')+'：'+RULES[k].lv[lv]));
+  story.appendChild(d); pulse('#btnClues'); updateBadges();
+}
+function ruleCard(k){
+  const lv=S.rules[k]||0, d=el('div','card rule-card lv'+lv);
+  const h=el('h4'); h.appendChild(el('span',null,RULES[k].t)); h.appendChild(el('span','tag lv'+lv, RULE_LV[lv])); d.appendChild(h);
+  d.appendChild(el('p',null,RULES[k].lv[lv]));
+  if(lv===2 && S.ruleWit[k]) d.appendChild(el('span','mnote','· '+({witness:'是拿亲眼看见的事换来的',deduce:'是推出来的',act:'照着做了一回，没出事',quiz:'在「四句话」那一夜琢磨明白的'}[S.ruleWit[k]]||'')));
+  return d;
+}
+function rulesBox(keys){
+  const box=el('div','rules-inline'); box.appendChild(el('div','ri-h','门的提示 · 你懂了几句'));
+  keys.forEach(k=>box.appendChild(ruleCard(k))); story.appendChild(box); scrollDown();
 }
 function has(id){ return S.clues.includes(id) || S.deds.includes(id); }
 function cond(c){
@@ -1414,7 +1702,7 @@ function cnTime(m){
   const ms = mi===0 ? '' : mi===30 ? '半' : (mi<10 ? '零'+cnNum(mi) : cnNum(mi))+'分';
   return '门内第'+cnNum(d)+'日'+pre+hs+ms;
 }
-function tpl(t){ return typeof t==='string' ? t.replace(/\{cn\}/g, cnTime(S.time)).replace(/\{clock\}/g, clockStr(S.time)) : t; }
+function tpl(t){ return typeof t==='string' ? t.replace(/\{outn\}/g, ()=>cnNum(aliveCount())+'个').replace(/\{cn\}/g, cnTime(S.time)).replace(/\{clock\}/g, clockStr(S.time)) : t; }
 function renderClock(delta){
   $('#clockVal').textContent = clockStr(S.time);
   const hh=Math.floor(S.time/60)%24; $('#clock').classList.toggle('night', hh>=18||hh<6);
@@ -1437,6 +1725,10 @@ function doFx(L){
     case '@score': S.score += L[1]; break;
     case '@time': addTime(L[1]); break;
     case '@ach': unlockAch(L[1]); break;
+    case '@ruleW': ruleUp(L[1],2,'witness'); break;
+    case '@ruleA': ruleUp(L[1],2,'act'); break;
+    case '@dieAll': Object.keys(PEOPLE).forEach(k=>{ if(k!=='lin' && kill(k,L[1])) deathLine(k,L[1]); }); break;
+    case '@dieLin': if(kill('lin', S.ending==='e4'?'第一夜 · 独自凭栏':'天黑以后')) deathLine('lin', S.ending==='e4'?'第一夜 · 独自凭栏':'天黑以后'); break;
   }
 }
 function applyFx(fx){
@@ -1446,6 +1738,7 @@ function applyFx(fx){
   if(fx.flag) S.flags[fx.flag] = true;
   if(fx.trust) S.trust += fx.trust;
   if(fx.clue) gainClue(fx.clue);
+  if(fx.study && S.rules[fx.study]>=1) ruleUp(fx.study,2,'deduce');
   let m = fx.min||0;
   if(fx.minIf && cond(fx.minIf[0])) m = fx.minIf[1];
   if(m) addTime(m);
@@ -1456,6 +1749,10 @@ function gainClue(id){
   toast('获得线索 · ' + CLUES[id].name);
   sysLine('[ 线索 ] ' + CLUES[id].name + ' — 已记录');
   pulse('#btnClues'); updateBadges();
+  if(id==='ritual1'){ ruleUp('tree',1); ruleUp('temple',1); }
+  if(id==='ritual2'||id==='welltense'||id==='wellice') ruleUp('well',1);
+  if(id==='hairice') ruleUp('rail',1);
+  if(id==='ceiling'||id==='longhair'){ ruleUp('rail',1); ruleUp('rail',2,'deduce'); }
 }
 function gainDed(id){
   if(!DEDS[id] || S.deds.includes(id)) return false;
@@ -1474,7 +1771,7 @@ function gainChar(id){
 function itemName(id){ return id==='none' ? '什么都不拿' : (CLUES[id]||DEDS[id]||{}).name || id; }
 
 /* ---- 渲染 ---- */
-function clearStory(){ story.innerHTML=''; controls.innerHTML=''; }
+function clearStory(){ clearNightTimer(); story.innerHTML=''; controls.innerHTML=''; }
 function scrollDown(){ requestAnimationFrame(()=>window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'})); }
 function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
 function fsNote(fs){
@@ -1552,10 +1849,13 @@ function render(L){
     case '@bilu': addBilu(L[1]); break;
     case '@pov': addPov(L[1]); break;
     case '@sys': sysLine(L[1]); break;
+    case '@rules': rulesBox(RULE_KEYS); break;
+    case '@rules1': rulesBox([L[1]]); break;
+    case '@die': { const p=String(L[1]).split('|'); if(kill(p[0],p[1])) deathLine(p[0],p[1]); if(p[2]) ruleUp(p[2],2,'witness'); break; }
     default: addLine(L[0], L[1], L[3]);
   }
 }
-const VIS = {'@phone':1,'@bilu':1,'@pov':2,'@sys':2};   // 1 = 需要翻页；2 = 直接显示
+const VIS = {'@phone':1,'@bilu':1,'@pov':2,'@sys':2,'@rules':2,'@rules1':2,'@die':2};   // 1 = 需要翻页；2 = 直接显示
 function isVis(L){ return L[0][0]!=='@' || !!VIS[L[0]]; }
 function showContinue(cb, label){
   contCb = cb || step;
@@ -1630,6 +1930,7 @@ function enter(id, fromLoad){
   if(n.memo) card.appendChild(el('span','mnote',n.memo));
   story.appendChild(card);
   window.scrollTo({top:0});
+  if(!fromLoad && n.rule1) ruleUp(n.rule1,1);
   queue = (n.sense ? [['~', n.sense]] : []).concat(n.lines||[]);
   afterQueue = ()=>nodeEnd(n);
   step();
@@ -1650,14 +1951,24 @@ function decideEnding(){
   Object.keys(ENDINGS).forEach(k=>{ delete f[k]; });
   f[e] = true; S.ending = e;
 }
+/* ---- 夜间限时 ---- */
+let nightTimer=null;
+function clearNightTimer(){ if(nightTimer){ clearInterval(nightTimer.iv); nightTimer=null; } }
+const TIMER_MODES={std:{n:'标准',k:1},long:{n:'延长',k:2.5},off:{n:'关闭',k:0}};
+function timerSec(base){ const m=TIMER_MODES[META.timer]||TIMER_MODES.std; return Math.round(base*m.k); }
+function timerLabel(){ const m=META.timer||'std'; return '夜间限时：'+TIMER_MODES[m].n+(m==='off'?'':'（约 '+timerSec(12)+' 秒）'); }
+function cycleTimer(){ const order=['std','long','off']; META.timer=order[(order.indexOf(META.timer||'std')+1)%3]; saveMeta(); $('#mTimer').textContent=timerLabel(); toast(timerLabel()); }
 function renderChoices(n){
+  clearNightTimer();
   controls.innerHTML='';
   controls.appendChild(el('div','choice-prompt', S.pov==='ruan' ? '> 阮白洁的选择' : '> 你的选择'));
   n.choices.filter(o=>cond(o.if)).forEach((o,i)=>{
-    const b=el('button','choice',o.t); b.dataset.n=String.fromCharCode(65+i);
+    const b=el('button','choice',o.t); b.dataset.n=String.fromCharCode(65+i); o._b=b;
+    if(o.rule && o.safe && S.rules[o.rule]>=2) b.appendChild(el('small','rule-ok','（照四句话）'));
     if(o.lock && cond(o.lock[0])){
       b.classList.add('locked'); b.disabled=true; b.appendChild(el('small',null,'（'+o.lock[1]+'）'));
-    } else b.onclick=()=>{
+    } else b.onclick=(ev)=>{
+      if(nightTimer){ S.timed.n++; clearNightTimer(); }
       S.choices++; sayChoice(o.t); applyFx(o.fx);
       playThen(o.say, ()=>{
         const to = o.to ? (typeof o.to==='function' ? o.to(S) : o.to) : null;
@@ -1666,6 +1977,24 @@ function renderChoices(n){
     };
     controls.appendChild(b);
   });
+  const sec = n.timed ? timerSec(n.timed.sec) : 0;
+  if(sec){
+    const def=n.choices[n.timed.def], tb=el('div','ntimer');
+    tb.appendChild(el('span','nt-l','夜 · '+n.timed.label)); const ss=el('span','nt-s'); tb.appendChild(ss);
+    const bar=el('i'); const fill=el('b'); bar.appendChild(fill); tb.appendChild(bar);
+    tb.appendChild(el('small','nt-d','时间到 = '+def.t.replace(/[（）]/g,'')));
+    controls.insertBefore(tb, controls.children[1]||null);
+    let left=sec*1000; const total=left;
+    const draw=()=>{ ss.textContent=(left/1000).toFixed(1)+'s'+(document.hidden?' · 暂停':''); fill.style.width=(100*left/total)+'%'; tb.classList.toggle('low', left<=3000); };
+    draw();
+    nightTimer={iv:setInterval(()=>{
+      if(document.hidden || openName){ draw(); return; }
+      left-=100; draw();
+      if(left<=0){ clearNightTimer(); S.timed.n++; S.timed.timeout++; S.flags['timeout_'+S.node]=true;
+        const d=el('div','line sys dead'); d.appendChild(el('span',null,'[ 时间到 ] '+(n.timed.out||'你没能动。'))); story.appendChild(d);
+        const b=def._b; if(b){ const f=b.onclick; b.onclick=null; f&&f(); } }
+    },100)};
+  }
   scrollDown();
 }
 function renderHub(n){
@@ -2144,6 +2473,8 @@ function renderClues(){
   const tg=el('button','combo-toggle', combo&&combo.on ? '退出组合推理' : '组合推理：挑两条线索合并');
   tg.onclick=()=>{ combo = combo&&combo.on ? null : {on:true, sel:[], msg:''}; renderClues(); };
   if(S.clues.length>=2) body.appendChild(tg);
+  body.appendChild(el('div','dsec','四句提示 · 读懂 '+RULE_KEYS.filter(k=>S.rules[k]>=2).length+' / 4'));
+  RULE_KEYS.forEach(k=>body.appendChild(ruleCard(k)));
   if(S.deds.length){
     body.appendChild(el('div','dsec','推论'));
     S.deds.forEach(id=>body.appendChild(makeCard(id)));
@@ -2180,6 +2511,14 @@ function tryCombo(){
 }
 function renderChars(){
   const body=$('#charBody'); body.innerHTML=''; let group='';
+  body.appendChild(el('div','dsec','门内名单 · 十三人 · 活着 '+aliveCount()));
+  const ro=el('div','roster');
+  Object.keys(PEOPLE).forEach(k=>{
+    const [cls,label,sub]=personStatus(k), r=el('div','r '+cls);
+    const nm=el('span','nm',PEOPLE[k].n); if(sub) nm.appendChild(el('small',null,sub)); r.appendChild(nm);
+    r.appendChild(el('span','s '+cls,label)); ro.appendChild(r);
+  });
+  body.appendChild(ro);
   Object.keys(CHARS).forEach(id=>{
     const c=CHARS[id];
     if(c.group!==group){ group=c.group; body.appendChild(el('div','dsec',group)); }
@@ -2230,7 +2569,7 @@ function toast(msg){ const box=$('#toasts'); while(box.children.length>=3) box.f
 function loadMeta(){
   let m=null; try{ m=JSON.parse(localStorage.getItem(SAVE_META)); }catch(e){}
   if(!m||typeof m!=='object') m={};
-  return {done:!!m.done, runs:m.runs|0, endings:Array.isArray(m.endings)?m.endings:[], ach:Array.isArray(m.ach)?m.ach:[], last:m.last||null};
+  return {done:!!m.done, runs:m.runs|0, endings:Array.isArray(m.endings)?m.endings:[], ach:Array.isArray(m.ach)?m.ach:[], last:m.last||null, timer:['std','long','off'].includes(m.timer)?m.timer:'std'};
 }
 function saveMeta(){ try{ localStorage.setItem(SAVE_META, JSON.stringify(META)); }catch(e){} }
 function unlockAch(k){ if(!ACH[k] || META.ach.includes(k)) return; META.ach.push(k); saveMeta(); toast('隐藏成就 · 「'+ACH[k].name+'」'); }
@@ -2244,6 +2583,13 @@ function rankOf(sc, e){
 function showEnding(){
   localStorage.removeItem(SAVE_AUTO);
   decideEnding();
+  if(!S.flags.v4scored){ S.flags.v4scored=true;
+    if(ESCAPE_ENDS.includes(S.ending)) ['xiong','ke'].forEach(k=>{ if(S.alive[k]) S.score+=2; });
+    S.score -= ['slipTree','slipTemple','slipWell'].filter(f=>S.flags[f]).length; }
+  if(S.ending!=='e4' && !['slipTree','slipTemple','slipWell','railing'].some(f=>S.flags[f])) unlockAch('rules');
+  if(RULE_KEYS.every(k=>S.rules[k]>=2 && S.ruleWit[k]==='deduce')) unlockAch('bare');
+  if(S.timed.n>=3 && !S.timed.timeout && META.timer!=='off') unlockAch('still');
+  if(S.ending==='e1' && S.alive.xiong && S.alive.ke && !['slipTree','slipTemple','slipWell','chengLost'].some(f=>S.flags[f])) unlockAch('nomore');
   const e=S.ending, sc=S.score, [rank,title,comment]=rankOf(sc,e);
   if(S.trust>=7) unlockAch('trusted');
   if(S.reads.ok>=3) unlockAch('reader');
@@ -2260,7 +2606,7 @@ function showEnding(){
   add('div','rank',rank); add('div','rank-title',title);
   add('p','t-desc',comment).style.marginBottom='6px';
   const st=add('div','stats');
-  [['评分',sc],['线索',S.clues.length+' / '+Object.keys(CLUES).length],['推论',S.deds.length+' / '+Object.keys(DEDS).length],['规则判断',S.quiz.right+' / '+S.quiz.total],
+  [['评分',sc],['线索',S.clues.length+' / '+Object.keys(CLUES).length],['推论',S.deds.length+' / '+Object.keys(DEDS).length],['四句提示',RULE_KEYS.filter(k=>S.rules[k]>=2).length+' / 4 读懂'],['活着下井',(ESCAPE_ENDS.includes(e)?aliveCount():0)+' / 13'],
    ['规则推演',S.board?S.board.pc+' / '+BOARD.tps.length+' 步 · '+S.board.ec+' / '+BOARD.tps.filter(t=>t.ok).length+' 证':'—'],['对峙',S.inter?'撬开 '+broke+' / 3 · 失误 '+S.inter.total:'—'],
    ['读人',S.reads.ok+' / '+S.reads.total],['门内时间',clockStr(S.time)]].forEach(([k,v])=>{ const s=el('div','stat',k); s.appendChild(el('b',null,String(v))); st.appendChild(s); });
   add('p','t-desc',trustLine()).style.cssText='margin-bottom:14px;font-style:italic;text-align:center';
@@ -2287,6 +2633,9 @@ function showSeal(){
     const b=el('div','ph-b'); SEAL_PHONE.msgs.forEach(m=>{ const me=m[0]===SEAL_PHONE.owner; const x=el('div','msg'+(me?' me':' ruan')); x.style.opacity=1; x.style.animation='none'; x.appendChild(el('small',null,me?'林秋石':'未知号码')); x.appendChild(document.createTextNode(m[1])); b.appendChild(x); });
     ph.appendChild(b); box.appendChild(ph);
   }
+  const out=ESCAPE_ENDS.includes(e) ? outNames() : [];
+  const ol=el('p','sp out-list', out.length ? '活着走到井底的：'+out.join('、')+'。'+(out.length>2&&e!=='e3'?'出门以后，除了阮白洁，林秋石再没见过他们。':'') : '第一扇门后来又开过很多次。从里面走出来的名字里，没有林秋石。');
+  ol.style.animationDelay=delay+'s'; delay+=0.9; box.appendChild(ol);
   const last=el('p','sp last','DOOR 02 · 菲尔夏鸟'); last.style.animationDelay=delay+'s'; box.appendChild(last);
   const btn=el('button','t-btn ghost','回到走廊'); btn.style.marginTop='18px'; btn.onclick=()=>{ $('#sealScreen').classList.add('hide'); showTitle(); };
   box.appendChild(btn);
@@ -2428,6 +2777,8 @@ $('#btnMenu').onclick=()=>openDrawer('menu');
 $('#btnSave').onclick=manualSave;
 $('#btnSound').onclick=toggleSound;
 $('#mSound').onclick=toggleSound;
+$('#mTimer').onclick=cycleTimer; $('#mTimer').textContent=timerLabel();
+document.addEventListener('visibilitychange',()=>{});
 $('#mSave').onclick=manualSave;
 $('#mLoad').onclick=()=>loadFrom(SAVE_MANUAL);
 $('#mLoadAuto').onclick=()=>loadFrom(SAVE_AUTO);
