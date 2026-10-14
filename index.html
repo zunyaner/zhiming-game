@@ -464,6 +464,66 @@ header{position:fixed!important;top:0;left:0;right:0;max-width:680px;margin:0 au
 header{z-index:30!important}
 header{background:#000!important;border-bottom:1px solid #141414!important}.survey,.board,.interro,.quiz,.read,.line{scroll-margin-top:96px}
 
+/* ===== v3：排版优先 ===== */
+:root{--serif:"Noto Serif SC","Noto Serif CJK SC","Source Han Serif SC","Source Han Serif CN","Songti SC","STSong","SimSun",serif;--sans:var(--serif)}
+body,button,.line p,.choice,.btn-next,.opt,.chip,.tac,.tp,.t-btn,.drawer{font-family:var(--serif)!important}
+.line p{font-size:17.5px;line-height:2.1}
+#story>*{max-width:34em;margin-left:auto!important;margin-right:auto!important}
+#app{max-width:none}
+header{max-width:none!important}
+#controls{max-width:calc(34em + 56px);margin:0 auto;width:100%}
+.photo,.strings,.survey svg,.sv-stamp{display:none!important}
+.survey svg,.board svg,.interro svg,.card svg,.photo,.rd-frag{filter:none!important}
+/* 卡片：细线 */
+.survey,.quiz,.read,.board,.interro,.bilu,.phone,.card{border:none!important;border-top:1px solid #2a2a2a!important;border-bottom:1px solid #2a2a2a!important;padding:22px 0!important;background:transparent!important}
+.card{border:1px solid #1f1f1f!important;padding:14px 16px!important}
+.survey h3,.board h3,.quiz h3,.interro h3{font-weight:400;letter-spacing:.25em;font-size:15px;color:#fff}
+.opt,.chip,.tac,.tp{border:none!important;border-bottom:1px solid #333!important;padding:6px 2px!important}
+.chip{margin:0 10px 6px 0!important}
+.opt.sel,.chip.sel,.tac.sel,.tp.sel,.chip.on,.tac.on,.tp.on{border-bottom-color:#fff!important}
+/* 文字探索 */
+.sv-areas{display:flex;flex-wrap:wrap;gap:6px 18px;margin:16px 0 4px;font-size:13px;letter-spacing:.15em}
+.sv-area{color:#777;padding:4px 0;border-bottom:1px solid transparent}
+.sv-area.cur{color:#fff;border-bottom-color:#fff}
+.sv-area .left{font-size:10px;color:#555;margin-left:4px;letter-spacing:0}
+.sv-area.cur .left{color:#888}
+.sv-prose{font-size:17px;line-height:2.15;color:#d8d8d8;margin:18px 0 8px;letter-spacing:.04em;animation:lineIn .6s both}
+.kw{color:#fff;border-bottom:1px dotted #bbb;cursor:pointer;padding:0 1px;outline:none}
+.kw:hover,.kw:focus{border-bottom-style:solid}
+.kw.crit{color:var(--red);border-bottom-color:var(--red)}
+.kw.seen{color:#666;border-bottom-color:#333;cursor:default}
+.kw.seen::after{content:"·已看";font-size:10px;color:#444}
+.sv-note{min-height:0}
+.legend{display:none!important}
+/* 别墅 */
+#titleScreen{background:#000!important}
+#titleScreen::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 45% at 50% 30%,rgba(255,255,255,.07),transparent 70%),radial-gradient(ellipse at 50% 50%,transparent 45%,rgba(0,0,0,.85) 100%)}
+.fog{position:fixed;inset:-20%;pointer-events:none;opacity:.5;background:radial-gradient(ellipse 40% 20% at 30% 70%,rgba(200,200,200,.05),transparent),radial-gradient(ellipse 35% 18% at 70% 60%,rgba(200,200,200,.04),transparent),repeating-radial-gradient(circle at 17% 23%,rgba(255,255,255,.018) 0 1px,transparent 1px 3px);animation:fogdrift 40s ease-in-out infinite alternate}
+@keyframes fogdrift{to{transform:translate3d(4%,-2%,0)}}
+.villa{position:relative;max-width:34em;padding:28px 22px 40px;font-family:var(--serif)}
+.v-top{margin-bottom:46px}
+.v-head h1{margin-top:0}
+.v-wall{display:grid;grid-template-columns:repeat(6,1fr);gap:14px 12px;margin:40px auto 10px;max-width:420px}
+.vdoor{position:relative;aspect-ratio:1/2.3;border:1px solid #1e1e1e;background:linear-gradient(180deg,#060606,#020202);color:#2e2e2e;font-size:10px;letter-spacing:.2em;writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;cursor:not-allowed}
+.vdoor::before{content:attr(data-n);position:absolute;top:-16px;left:0;right:0;writing-mode:horizontal-tb;text-align:center;font-size:9px;color:#333;letter-spacing:.1em}
+.vdoor::after{content:"";position:absolute;right:5px;top:50%;width:2px;height:2px;border-radius:50%;background:#2a2a2a}
+.vdoor.open{border-color:#cfcfcf;color:#fff;cursor:pointer;box-shadow:inset 0 0 18px rgba(255,255,255,.12),0 0 24px rgba(255,255,255,.05)}
+.vdoor.open::before{color:#999}
+.vdoor.open::after{background:#ddd}
+.vdoor.open .sill{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.6);animation:breath 4s ease-in-out infinite}
+@keyframes breath{50%{opacity:.4}}
+.vdoor.open:hover,.vdoor.open:focus{outline:none;box-shadow:inset 0 0 26px rgba(255,255,255,.2),0 0 30px rgba(255,255,255,.08)}
+.v-rest{text-align:left;margin:34px 0 18px;min-height:3em}
+.v-menu{display:flex;flex-direction:column;margin:10px 0 26px;border-top:1px solid #161616}
+.v-menu .vh{display:flex;align-items:baseline;gap:16px;text-align:left;padding:13px 2px;border-bottom:1px solid #161616;color:#ccc;font-family:var(--serif)}
+.v-menu .vh b{font-weight:400;min-width:6.5em;letter-spacing:.2em;color:#e6e6e6;font-size:15px}
+.v-menu .vh span{color:#666;font-size:13px;letter-spacing:.04em}
+.v-menu .vh:hover b,.v-menu .vh:focus b{color:#fff}.v-menu .vh:hover span{color:#999}
+.v-epi{margin:22px 0}
+@media (max-width:520px){.v-wall{gap:12px 8px}.v-menu .vh{flex-direction:column;gap:2px}.villa{padding:22px 18px 36px}.line p,.sv-prose{font-size:16.5px}}
+@media (prefers-reduced-motion: reduce){.fog{animation:none}}
+
+@media (max-width:520px){#story{padding-top:118px!important}}
 </style>
 </head>
 <body>
@@ -513,7 +573,7 @@ header{background:#000!important;border-bottom:1px solid #141414!important}.surv
     <button class="t-btn ghost" id="mTitle">回到别墅</button>
     <button class="t-btn ghost" id="mReset">清除全部存档</button>
     <div class="board-meta" style="margin-top:16px;line-height:1.85">
-      <b>门内须知</b><br>· 点「继续」或按 空格 / 回车 往下读；数字键 1–9 选选项。每进入新的一节都会自动存档。<br>· 你是<b>林秋石</b>，第一次进门的新人。标着「视角 · 阮白洁」的段落，你借她的眼睛看人：点出对方身上藏着的那一处破绽，这叫「读人」。<br>· 页眉的「门内时间」会随行动推进。<b>天黑以后，规矩会变</b>；拖得太久，钥匙也救不了你。<br>· 三楼和古庙要亲手点开场景图去查；线索栏可以「组合推理」，两条线索合起来，推出这扇门的规则。<br>· 「规则推演」要把造棺材的每一步连上对应的人和证据，最后说出那东西是什么、为什么是你们。<br>· 和木匠的对峙：每一轮选一件线索、一种问法，三道口风要一道一道撬开。<br>· 阮白洁肯和你说多少，看你怎么待她。<br>· 一共六种结局，结局后有一页「门外」。通关一次后，标题处开放「重读模式」，会标出你漏掉的伏笔。<br>· 环境声全部由浏览器实时合成，默认关闭。
+      <b>门内须知</b><br>· 点「继续」或按 空格 / 回车 往下读；数字键 1–9 选选项。每进入新的一节都会自动存档。<br>· 你是<b>林秋石</b>，第一次进门的新人。标着「视角 · 阮白洁」的段落，你借她的眼睛看人：点出对方身上藏着的那一处破绽，这叫「读人」。<br>· 页眉的「门内时间」会随行动推进。<b>天黑以后，规矩会变</b>；拖得太久，钥匙也救不了你。<br>· 三楼和古庙要亲手点开现场描写去查；线索栏可以「组合推理」，两条线索合起来，推出这扇门的规则。<br>· 「规则推演」要把造棺材的每一步连上对应的人和证据，最后说出那东西是什么、为什么是你们。<br>· 和木匠的对峙：每一轮选一件线索、一种问法，三道口风要一道一道撬开。<br>· 阮白洁肯和你说多少，看你怎么待她。<br>· 一共六种结局，结局后有一页「门外」。通关一次后，标题处开放「重读模式」，会标出你漏掉的伏笔。<br>· 环境声全部由浏览器实时合成，默认关闭。
     </div>
   </div>
 </aside>
@@ -522,48 +582,34 @@ header{background:#000!important;border-bottom:1px solid #141414!important}.surv
 <section class="screen" id="titleScreen">
   <div class="rain" id="rain"></div>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><g id="doorsL"></g><g id="doorsR"></g></svg>
+  <div class="fog" aria-hidden="true"></div>
   <div class="villa">
-    <div class="v-top"><span>黑曜石别墅 · 客厅</span><span id="vClock">门外 · 夜</span></div>
-    <svg class="v-room" viewBox="0 0 400 270" role="img" aria-label="黑曜石别墅客厅：一面墙的门、沙发、柜子、书桌、书架、唱机">
-      <defs><radialGradient id="vlamp" cx=".5" cy=".3" r=".7"><stop offset="0" stop-color="#2a2a2a"/><stop offset="1" stop-color="#050505" stop-opacity="0"/></radialGradient></defs>
-      <rect width="400" height="270" fill="#050505"/>
-      <rect x="60" y="0" width="280" height="180" fill="url(#vlamp)"/>
-      <line x1="0" y1="190" x2="400" y2="190" stroke="#2c2c2c"/>
-      <line x1="0" y1="190" x2="-40" y2="270" stroke="#1c1c1c"/><line x1="400" y1="190" x2="440" y2="270" stroke="#1c1c1c"/>
-      <g id="vDoors"></g>
-      <g class="vh" data-act="chars" tabindex="0" role="button" aria-label="同伴">
-        <path d="M120 232 v-22 q0-8 8-8 h144 q8 0 8 8 v22 M112 216 h16 v26 h-16z M272 216 h16 v26 h-16z M128 232 h144 v10 h-144z" fill="#0a0a0a" stroke="#bdbdbd" stroke-width="1"/>
-        <text x="200" y="258" class="vl">同伴</text></g>
-      <g class="vh" data-act="cabinet" tabindex="0" role="button" aria-label="钥匙与线索柜">
-        <path d="M18 196 h52 v62 h-52z M18 216 h52 M18 236 h52 M44 196 v62" fill="#0a0a0a" stroke="#bdbdbd"/>
-        <circle cx="40" cy="206" r="1.5" fill="#bdbdbd"/><circle cx="48" cy="206" r="1.5" fill="#bdbdbd"/>
-        <text x="44" y="267" class="vl">钥匙柜</text></g>
-      <g class="vh" data-act="save" tabindex="0" role="button" aria-label="存档">
-        <path d="M318 214 h66 M324 214 v40 M378 214 v40 M336 208 h22 l2 6 h-26z" fill="none" stroke="#bdbdbd"/>
-        <text x="351" y="205" class="vl">书桌 · 存档</text></g>
-      <g class="vh" data-act="reread" tabindex="0" role="button" aria-label="重读">
-        <path d="M8 120 h44 v66 h-44z M8 142 h44 M8 164 h44 M14 122 v18 M20 124 v16 M28 122 v18 M16 146 v16 M24 144 v18 M34 146 v16 M14 168 v16 M40 166 v18" fill="none" stroke="#8a8a8a"/>
-        <text x="30" y="114" class="vl">书架 · 重读</text></g>
-      <g class="vh" data-act="sound" tabindex="0" role="button" aria-label="环境声">
-        <path d="M352 180 h36 v10 h-36z M362 176 q8-30 30-34 M362 176 l-6 -6 q14 -22 36 -28" fill="none" stroke="#8a8a8a"/>
-        <text x="370" y="132" class="vl" id="vSnd">唱机 · 关</text></g>
-    </svg>
-    <p class="v-rest" id="vRest"></p>
+    <div class="v-top"><span>黑曜石别墅</span><span id="vClock">门外 · 夜</span></div>
     <div class="v-head">
       <h1>致命游戏</h1>
-      <div class="v-sub">第一扇门 ·《独自莫凭栏》</div>
-      <p class="v-epi">一人不入庙，二人不观井，三人不抱树，独自莫凭栏。</p>
+      <div class="v-sub">第一扇门 · 独自莫凭栏</div>
     </div>
+    <div class="v-wall" id="vDoors" role="list" aria-label="墙上的十二扇门"></div>
+    <p class="v-rest" id="vRest"></p>
+    <nav class="v-menu" aria-label="别墅">
+      <button class="vh" data-act="chars"><b>同伴</b><span>沙发上留着别人的体温。</span></button>
+      <button class="vh" data-act="cabinet"><b>钥匙柜</b><span>带出来的东西，都锁在这里。</span></button>
+      <button class="vh" data-act="save"><b>书桌 · 存档</b><span>把走到哪一步，写下来。</span></button>
+      <button class="vh" data-act="reread"><b>书架 · 重读</b><span>同一个故事，第二遍才看得见针脚。</span></button>
+      <button class="vh" data-act="sound"><b id="vSnd">唱机 · 关</b><span>风声、夜、庙里的回音。</span></button>
+    </nav>
+    <p class="v-epi">一人不入庙，二人不观井，三人不抱树，独自莫凭栏。</p>
     <div class="v-btns">
-      <button class="t-btn" id="tStart">推开第一扇门 · 雪村</button>
+      <button class="t-btn" id="tStart">推开第一扇门</button>
       <button class="t-btn ghost" id="tContinue" style="display:none">继续（自动存档）</button>
       <button class="t-btn ghost" id="tLoad" style="display:none">读取手动存档</button>
       <button class="t-btn ghost" id="tReread" style="display:none">重读模式 · 标出伏笔</button>
-      <button class="t-btn ghost" id="tAch">钥匙柜 · 结局与成就</button>
+      <button class="t-btn ghost" id="tAch">结局与成就</button>
     </div>
     <p class="t-foot">非商业同人改编 · 剧情依据西子绪《死亡万花筒》（网剧名《致命游戏》）第一扇门<br>所有叙述与对白均为重新撰写，未摘录原著文字</p>
   </div>
 </section>
+
 
 <section class="screen hide" id="endScreen" style="overflow-y:auto;align-items:flex-start;padding:30px 0">
   <div class="tbox" id="endBox"></div>
@@ -858,7 +904,7 @@ floor3:{ch:3, title:'三楼', pov:'lin', amb:'wind', at:1860,
   ['','他用热毛巾擦了半天，毛巾整条都红了。然后他抬起头，看向这间屋子的天花板。']
  ],
  survey:{min:3, cost:8, title:'现场 · 三楼东头的房间', stamp:'ROOM 3F', map:'room', ach:'survey',
-  intro:'点开场景图上的红圈，林秋石会过去细看。至少看三处才能下楼，每处大约 8 分钟。熊漆在楼下催大家吃饭，村长随时会来。',
+  intro:'点带虚线的词，林秋石会过去细看；上方可以换方位。至少看三处才能下楼，每处大约 8 分钟。熊漆在楼下催大家吃饭，村长随时会来。',
   done:[['熊漆','行了，下去吧。村长来了。'],['','阮白洁走在最后，下楼前又回头看了一眼天花板。']],
   all:[['','六处都看过了。阮白洁靠在门框上，冲他扬了扬下巴：「胆子不小嘛，林哥。」']],
   quips:[['阮白洁','那边就是面墙，墙会吃人吗？'],['小柯','别乱碰东西。'],['阮白洁','林哥，你蹲那儿半天了，脚不麻吗？'],['熊漆','快点。']],
@@ -1073,7 +1119,7 @@ temple:{ch:6, title:'古庙', pov:'lin', amb:'temple', at:2490,
   ['','庙里正中供着一尊神像。香火熏了不知多少年，熏得那张脸黑乎乎一团，看不清五官。']
  ],
  survey:{min:3, cost:10, title:'现场 · 村边古庙', stamp:'TEMPLE', map:'temple', ach:'temple',
-  intro:'庙里暗。点开场景图上的红圈去查，至少查三处才算「拜过」。每处约 10 分钟。天快黑了，都跟紧点，别落单。',
+  intro:'庙里暗。点带虚线的词去查，上方可以换方位，至少查三处才算「拜过」。每处约 10 分钟。天快黑了，都跟紧点，别落单。',
   done:[['熊漆','都拜了，走。一起走，谁都别留下。'],['','出庙门的时候，林秋石觉得身后有人在看他。他没回头。']],
   all:[['','六处都看过了。阮白洁站在神像底下，抬头看了很久，忽然笑了一下：「挺好看的嘛，就是脖子长了点。」']],
   quips:[['小柯','别离人太远。'],['阮白洁','林哥，那里黑，你一个人别过去。'],['熊漆','拜完赶紧走。'],['阮白洁','你听，梁上是不是有动静？']],
@@ -1916,47 +1962,64 @@ function buildSketch(svg, map){
   svgEl('ellipse',{cx:300,cy:228,rx:16,ry:6,fill:'#1e2a30',opacity:.8},svg);
   svgEl('path',{d:'M392 252 l-6 -12 l6 3 l6 -3z',fill:ink},svg); lab(392,266,'N',{'font-size':8,fill:ink});
 }
+const TEXTMAP={
+ room:[
+  {id:'door', name:'门口', p:'门半掩着。{blood}从门缝底下爬出来，在门槛外冻成一层薄薄的壳。屋里比走廊更冷，冷得像有人一直开着窗。'},
+  {id:'mid', name:'屋子中间', p:'地板中央，{body}并排躺着，像被谁仔细摆过。林秋石不敢多看，抬起头——{ceil}的木板颜色比别处深，深得发黑。'},
+  {id:'win', name:'窗边与床', p:'{window}关得严严实实，窗台上的雪积得很平。靠墙一张旧木床，{bed}黑着，像一张没合上的嘴。'},
+  {id:'corner', name:'墙角', p:'灯照不到的那个{corner}，地板上好像有一点湿痕。也可能只是影子。'}
+ ],
+ temple:[
+  {id:'gate', name:'庙门', p:'庙比想象中小。{door}被踩得发亮，门板上的漆掉了大半，风从缝里钻进来，吹得什么东西轻轻响。'},
+  {id:'hall', name:'正殿', p:'正中是一尊{statue}，脸被香火熏黑，看不清眉眼。下面一张{altar}，旁边的{censer}里，香灰还是温的。'},
+  {id:'wall', name:'左侧墙', p:'左边整面墙上是一幅{mural}，颜料剥落，只剩下雪、人群，和一口井的轮廓。'},
+  {id:'up', name:'抬头', p:'庙顶很高。粗大的{beam}横在黑暗里，有一处颜色不对，像新伤。'}
+ ]
+};
+const CRIT_SPOTS={body:1, statue:1};
 function renderSurvey(n){
-  const sv=n.survey, spots=sv.spots;
+  const sv=n.survey, spots=sv.spots, areas=TEXTMAP[sv.map]||[{id:'all',name:'这里',p:spots.map(s=>'{'+s.id+'}').join('，')+'。'}];
   const box=el('div','survey');
-  box.innerHTML='<div class="sv-stamp"></div><h3></h3>'; box.querySelector('.sv-stamp').textContent=sv.stamp||'SCENE'; box.querySelector('h3').textContent=sv.title||'现场';
+  box.appendChild(el('h3',null,sv.title||'现场'));
   box.appendChild(el('div','sv-sub',sv.intro));
-  const svg=svgEl('svg',{viewBox:'0 0 420 282',role:'img','aria-label':sv.title||'场景图'});
-  box.appendChild(svg); buildSketch(svg, sv.map);
-  const legend=el('div','legend'); box.appendChild(legend);
+  const nav=el('div','sv-areas'); nav.setAttribute('role','tablist'); box.appendChild(nav);
+  const prose=el('div','sv-prose'); box.appendChild(prose);
   const note=el('div','sv-note'); box.appendChild(note);
   story.appendChild(box); scrollDown();
-  let busy=false, qi=0; const hsEls={};
-  spots.forEach(s=>{
-    const g=svgEl('g',{class:'hs','data-id':s.id,tabindex:0},svg);
-    svgEl('circle',{class:'ring',cx:s.x,cy:s.y,r:11},g);
-    svgEl('circle',{class:'dot',cx:s.x,cy:s.y,r:11},g);
-    svgEl('text',{class:'n',x:s.x,y:s.y},g).textContent=s.n;
-    svgEl('text',{class:'lb',x:s.x,y:s.y+22},g).textContent=s.label;
-    g.addEventListener('click',e=>{ e.stopPropagation(); inspect(s); });
-    g.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); e.stopPropagation(); inspect(s); } });
-    hsEls[s.id]=g;
-  });
-  svg.addEventListener('click',()=>{ if(busy) return; const q=sv.quips[qi++ % sv.quips.length]; say(q[0], q[1]); });
+  let busy=false, qi=0, cur=areas[0].id;
+  const spotOf=id=>spots.find(s=>s.id===id);
+  const areaSpots=a=>(a.p.match(/\{(\w+)\}/g)||[]).map(x=>x.slice(1,-1)).filter(spotOf);
+  prose.addEventListener('click',e=>{ if(e.target.closest('.kw')||busy) return; const q=sv.quips[qi++ % sv.quips.length]; say(q[0], q[1]); });
   function say(who, text){ note.innerHTML=''; note.appendChild(el('span','who '+(SPEAKER_CLASS[who]||'c-oth'),who)); note.appendChild(el('p',null,text)); }
-  function refresh(){
-    legend.innerHTML='';
-    spots.forEach(s=>{
-      const seen=S.survey.includes(s.id);
-      hsEls[s.id].classList.toggle('seen', seen);
-      if(seen) hsEls[s.id].querySelector('text.n').textContent='✓';
-      const sp=el('span',seen?'seen':null); sp.innerHTML='<b>'+s.n+'</b>'; sp.appendChild(document.createTextNode(s.label));
-      if(!seen && s.clue) sp.appendChild(el('i',null,'可能有线索'));
-      legend.appendChild(sp);
+  function drawArea(){
+    const a=areas.find(x=>x.id===cur); prose.innerHTML=''; prose.style.animation='none'; void prose.offsetWidth; prose.style.animation='';
+    a.p.split(/(\{\w+\})/).forEach(part=>{
+      const m=part.match(/^\{(\w+)\}$/); const s=m&&spotOf(m[1]);
+      if(!s){ prose.appendChild(document.createTextNode(part)); return; }
+      const k=el('span','kw hs'+(CRIT_SPOTS[s.id]?' crit':''), s.label); k.dataset.id=s.id; k.tabIndex=0; k.setAttribute('role','button');
+      if(S.survey.includes(s.id)) k.classList.add('seen');
+      k.addEventListener('click',e=>{ e.stopPropagation(); inspect(s); });
+      k.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); e.stopPropagation(); inspect(s); } });
+      if(busy) k.style.pointerEvents='none';
+      prose.appendChild(k);
     });
-    box.classList.toggle('busy', busy);
-    renderSurveyControls();
   }
+  function drawNav(){
+    nav.innerHTML='';
+    areas.forEach(a=>{
+      const left=areaSpots(a).filter(id=>!S.survey.includes(id)).length;
+      const b=el('button','sv-area'+(a.id===cur?' cur':''), a.name); b.dataset.left=left; b.dataset.area=a.id;
+      b.appendChild(el('span','left', left?String(left):'✓'));
+      b.onclick=()=>{ if(busy||a.id===cur) return; cur=a.id; refresh(); };
+      nav.appendChild(b);
+    });
+  }
+  function refresh(){ drawNav(); drawArea(); box.classList.toggle('busy', busy); renderSurveyControls(); }
   function renderSurveyControls(){
     controls.innerHTML='';
     const cnt=S.survey.length, left=spots.length-cnt;
-    controls.appendChild(el('div','choice-prompt','> 探索：已查看 '+cnt+' / '+spots.length+' 处（至少 '+sv.min+' 处）· 点场景图上的红圈'));
-    const back=el('button','btn-ghost','↑ 回到场景图'); back.onclick=()=>box.scrollIntoView({behavior:'smooth', block:'start'}); controls.appendChild(back);
+    controls.appendChild(el('div','choice-prompt','探索 · 已查看 '+cnt+' / '+spots.length+' 处（至少 '+sv.min+' 处）· 点带虚线的词，或换个方位'));
+    const back=el('button','btn-ghost','↑ 回到现场'); back.onclick=()=>box.scrollIntoView({behavior:'smooth', block:'start'}); controls.appendChild(back);
     const end=el('button','btn-next');
     if(busy){ end.disabled=true; end.textContent='……'; }
     else if(cnt<sv.min){ end.disabled=true; end.textContent='还要再看 '+(sv.min-cnt)+' 处'; }
@@ -1977,7 +2040,7 @@ function renderSurvey(n){
   }
   function finish(){
     busy=true; box.classList.add('busy');
-    box.querySelectorAll('.hs').forEach(g=>g.style.pointerEvents='none');
+    box.querySelectorAll('.hs,.sv-area').forEach(g=>g.style.pointerEvents='none');
     const missed=spots.filter(s=>!S.survey.includes(s.id));
     let lines=[];
     const missedClue=missed.filter(s=>s.clue && !S.clues.includes(s.clue));
@@ -2267,7 +2330,7 @@ function makeCard(id){
   const d=el('div','card'+(isD?' ded':'')+((isD?S.freshDeds:S.freshClues).includes(id)?' fresh':''));
   d.dataset.id=id;
   d.innerHTML='<span class="pin"></span><span class="clip"></span>';
-  const ph=el('div','photo'); ph.innerHTML=photo(c.ph); d.appendChild(ph);
+  
   const h=el('h4'); h.appendChild(el('span',null,c.name)); h.appendChild(el('span','tag',isD?'推论':c.tag)); d.appendChild(h);
   d.appendChild(el('p',null,c.desc));
   if(c.note) d.appendChild(el('span','mnote','林：'+c.note));
@@ -2537,21 +2600,15 @@ function villaRest(k){
 function buildVilla(){
   const g=$('#vDoors'); if(!g || g.childNodes.length) return;
   for(let i=0;i<12;i++){
-    const r=Math.floor(i/6), c=i%6, x=74+c*44, y=26+r*80, w=32, hh=66, open=i===0;
-    const d=svgEl('g',{class:'vdoor '+(open?'open':'locked'),tabindex:open?0:-1,role:open?'button':'img','aria-label':open?'第一扇门 · 雪村':'第'+(i+1)+'扇门 · 待开启'},g);
-    svgEl('rect',{class:'df',x,y,width:w,height:hh,fill:'#070707',stroke:open?'#e8e8e8':'#2a2a2a','stroke-dasharray':open?'':'2 2'},d);
-    svgEl('circle',{cx:x+w-6,cy:y+hh/2,r:1.4,fill:open?'#e8e8e8':'#2a2a2a'},d);
-    if(open){ svgEl('rect',{x,y:y+hh-2,width:w,height:2,fill:'#fff',opacity:.8},d); }
-    const t=svgEl('text',{x:x+w/2,y:y+hh/2+3,'text-anchor':'middle','font-size':open?9:6,fill:open?'#fff':'#3a3a3a','font-family':'var(--serif)'},d);
-    t.textContent=open?'雪村':'待开启';
-    const n=svgEl('text',{x:x+w/2,y:y-4,'text-anchor':'middle','font-size':6,fill:open?'#999':'#333','font-family':'monospace'},d); n.textContent=String(i+1).padStart(2,'0');
-    if(open){ const go=()=>{ if(readSave(SAVE_AUTO)) loadFrom(SAVE_AUTO); else startNew(false); }; d.addEventListener('click',go); d.addEventListener('keydown',ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); go(); } }); }
-    else d.addEventListener('click',()=>{ villaToast('这扇门还没有开。'); });
+    const open=i===0, d=el('div','vdoor '+(open?'open':'locked'), open?'雪村':'待开启');
+    d.dataset.n=String(i+1).padStart(2,'0'); d.setAttribute('role','listitem');
+    if(open){ d.tabIndex=0; d.setAttribute('aria-label','第一扇门 · 雪村'); d.appendChild(el('span','sill'));
+      const go=()=>{ if(readSave(SAVE_AUTO)) loadFrom(SAVE_AUTO); else startNew(false); };
+      d.addEventListener('click',go); d.addEventListener('keydown',ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); go(); } }); }
+    else { d.setAttribute('aria-label','第'+(i+1)+'扇门 · 待开启'); d.addEventListener('click',()=>villaToast('这扇门还没有开。')); }
+    g.appendChild(d);
   }
-  document.querySelectorAll('.vh').forEach(h=>{
-    const act=()=>villaAct(h.dataset.act);
-    h.addEventListener('click',act); h.addEventListener('keydown',ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); act(); } });
-  });
+  document.querySelectorAll('.vh').forEach(h=>h.addEventListener('click',()=>villaAct(h.dataset.act)));
 }
 function villaToast(m){ const v=$('#vClock'); v.textContent=m; clearTimeout(villaToast.t); villaToast.t=setTimeout(()=>v.textContent='门外 · 夜',2600); }
 function villaPeek(){

@@ -17,4 +17,4 @@
 - 自动存档 / 手动存档（localStorage），环境声开关（默认关闭）
 - 桌面端、移动端都能玩；不依赖任何外部资源
 
-直接打开 `index.html` 就能玩。v2 起：门外是黑曜石别墅客厅，门内是极简黑白。旧版 HUD 风格保存在 [v1-hud.html](v1-hud.html)。
+直接打开 `index.html` 就能玩。v3：排版优先、纯文字的恐怖小说质感（无插画）。旧版：[v1-hud.html](v1-hud.html)、[v2-lineart.html](v2-lineart.html)。
