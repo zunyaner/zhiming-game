@@ -23,3 +23,9 @@
 - **场景图片**：15 张场景图（雪林、雾林、破庙神像、火、徽派雪村、雾巷、黑影、木楼走廊、客房、庙外、屋顶、暗巷、古井、老树、神像特写）均由 Grok Bot 图像生成工具原创生成，无第三方素材；转为 WebP（1280×720，q66）后以 data URL 嵌入。程序绘制版保留为后备。
 - **书法字体**：Ma Shan Zheng（马善政毛笔楷书），Google Fonts，SIL Open Font License 1.1（见 OFL-MaShanZheng.txt）。已用 fonttools 子集化为游戏实际用到的字符，WOFF2 内嵌，字体名改为 ZBrush 引用。
 - **配音**：用 edge-tts（微软 Azure 神经语音 zh-CN-YunjianNeural / XiaoxiaoNeural / YunxiNeural）合成，再用 ffmpeg 降调、加混响，编码为单声道 MP3 内嵌。系统朗读（speechSynthesis）只在解码失败时作为后备。
+
+## v9 移动端
+单文件内嵌 2.2MB 资源在低端手机上会解析失败/一直黑屏。现已改为：
+- `images/*.webp`、`audio/*.mp3`、`fonts/MaShanZheng.woff2` 由 Pages 分文件提供
+- `index.html` 约 310KB，启动时立刻显示标题（图未就绪时用程序绘制后备），图加载后再换实景
+- 离线整包备份：`v9-pre-mobile.html`（仍含全部 data URL，桌面可用）
