@@ -18,3 +18,8 @@
 - 桌面端、移动端都能玩；不依赖任何外部资源
 
 直接打开 `index.html` 就能玩。v3：排版优先、纯文字的恐怖小说质感（无插画）。旧版：[v1-hud.html](v1-hud.html)、[v2-lineart.html](v2-lineart.html)。
+
+## v8 资源来源（全部内嵌于 index.html，离线单文件）
+- **场景图片**：15 张场景图（雪林、雾林、破庙神像、火、徽派雪村、雾巷、黑影、木楼走廊、客房、庙外、屋顶、暗巷、古井、老树、神像特写）均由 Grok Bot 图像生成工具原创生成，无第三方素材；转为 WebP（1280×720，q66）后以 data URL 嵌入。程序绘制版保留为后备。
+- **书法字体**：Ma Shan Zheng（马善政毛笔楷书），Google Fonts，SIL Open Font License 1.1（见 OFL-MaShanZheng.txt）。已用 fonttools 子集化为游戏实际用到的字符，WOFF2 内嵌，字体名改为 ZBrush 引用。
+- **配音**：用 edge-tts（微软 Azure 神经语音 zh-CN-YunjianNeural / XiaoxiaoNeural / YunxiNeural）合成，再用 ffmpeg 降调、加混响，编码为单声道 MP3 内嵌。系统朗读（speechSynthesis）只在解码失败时作为后备。
