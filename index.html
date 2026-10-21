@@ -724,6 +724,9 @@ body.cg-on .toast{padding:.5em 1.6em;font-size:14px}
 body.cg-on .toast::before{content:'— ';color:#d8392f} body.cg-on .toast::after{content:' —';color:#d8392f}
 @media (max-width:760px){ body.cg-on .tps,body.cg-on .it-tac{grid-template-columns:1fr} body.cg-on .survey .legend{grid-template-columns:1fr} }
 
+body:not(.cg-on) #gHud,body:not(.cg-on) #gQuest,body:not(.cg-on) #gPanel,body:not(.cg-on) #gSting{display:none!important}
+body.cg-on #app{animation:zIn .45s ease-out}@keyframes zIn{from{opacity:0}to{opacity:1}}
+
 body.cg-on #saveInfo{display:none}
 </style>
 </head>
@@ -3687,7 +3690,7 @@ function montage(){ stage='mont'; layer('lMont'); A.stopDrone(.8); root.classLis
   later(SHOTS.length*per+300,()=>{ CFG.played=true; saveCfg(); toGame(()=>startNew(false)); });
 }
 /* ---------- 进入门内：外壳淡出，画布转为门内背景 ---------- */
-function toGame(after){ clearT(); A.stopDrone(.6); try{ speechSynthesis.cancel(); }catch(e){} root.classList.add('fading'); root.classList.remove('seq');
+function toGame(after){ document.documentElement.classList.add('zboot'); clearT(); A.stopDrone(.6); try{ speechSynthesis.cancel(); }catch(e){} root.classList.add('fading'); root.classList.remove('seq');
   setTimeout(()=>{ layer(''); stage='game'; root.classList.add('bgmode'); root.classList.remove('fading'); document.body.classList.add('cg-on'); unboot(); if(!raf){ t0=performance.now(); raf=requestAnimationFrame(frame); } GFX.sync(); },720);
   if(after) setTimeout(()=>{ try{ after(); }catch(e){ console.warn(e); } if(!CFG.mute && typeof Amb!=='undefined' && !Amb.on){ try{ Amb.toggle(); syncSoundUI(); }catch(e){} } },60); }
 function toClassic(){ clearT(); A.stopDrone(.6); root.classList.add('hide'); root.classList.remove('bgmode','seq'); document.body.classList.remove('cg-on'); cancelAnimationFrame(raf); raf=0; stage='off'; layer(''); unboot(); }
